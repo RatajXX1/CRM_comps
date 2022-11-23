@@ -13,22 +13,16 @@ function HeaderView() {
             }}
         >
             <Container fluid sx={{position: "relative", height: '100%'}}>
-                <Group
-                    sx={{
-                        float: "left",
-                        position: "relative",
-                        height: "95%",
-                        top: "50%",
-                        transform: "translate(0,-50%)",
-                        left: "300px"
-                    }}
-                >
-                    <Autocomplete
+                <Autocomplete
                         placeholder="Szukaj.."
                         data={["Komputer padł", "Komputer padł", "Komputer padł"]}
                         sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%,-50%)",
                             zIndex:"3",
-                            width: "300px",
+                            width: "50%",
                             ".mantine-Autocomplete-input": {
                                 backgroundColor: "#F1F3F8 !important",
                                 border: "none"
@@ -39,8 +33,7 @@ function HeaderView() {
                         icon={<IconSearch/>}
                     >
 
-                    </Autocomplete>
-                </Group>
+                </Autocomplete>
                 <Group
                     sx={{
                         float: "right",
@@ -55,7 +48,8 @@ function HeaderView() {
                         leftIcon={<IconUserCircle/>}
                         rightIcon={<IconChevronDown/>}
                         sx={{
-                            color: "rgba(0, 45, 208)",
+                            color: "rgba(0, 45, 208, .75)",
+                            // backgroundColor: "#F1F3F8",
                             "&:hover": {
                                 backgroundColor: "rgba(0, 45, 208, .1)"
                             }

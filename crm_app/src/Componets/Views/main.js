@@ -1,6 +1,7 @@
-import { AppShell } from "@mantine/core";
+import { AppShell, ScrollArea } from "@mantine/core";
 import HeaderView from "../Header";
 import NavbarView from "../Navbar";
+import DashboardView from "./dashboard";
 
 
 function MainView() {
@@ -15,7 +16,12 @@ function MainView() {
                 }
             }}
         >
-            widok
+            <ScrollArea
+                style={{width: "100%", height: "100%"}} 
+                type="always"
+            >
+                <DashboardView/>
+            </ScrollArea>
         </AppShell>
     )
 }
