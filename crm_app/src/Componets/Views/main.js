@@ -4,6 +4,13 @@ import NavbarView from "../Navbar";
 import DashboardView from "./dashboard";
 
 
+const PageSelect = () => {
+    switch (window.location.pathname) {
+        case "/":
+            return <DashboardView/>
+    }
+}
+
 function MainView() {
     return (
         <AppShell
@@ -14,8 +21,10 @@ function MainView() {
                 ".mantine-AppShell-main": {
                     overflow: "hidden",
                     minHeight: "unset",
-                    height: "90vh"
-                }
+                    height: "90vh",
+                    paddingTop: "calc(var(--mantine-header-height, 0px) - 40px)"
+                },
+                // padding-top: calc(var(--mantine-header-height, 0px) + 16px)
             }}
         >
             <ScrollArea
@@ -23,7 +32,9 @@ function MainView() {
                 type="always"
                 offsetScrollbars
             >
-                <DashboardView/>
+                {
+                    PageSelect()
+                }
             </ScrollArea>
         </AppShell>
     )

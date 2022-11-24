@@ -1,5 +1,6 @@
 import { Card, Container, Flex, Group, Stack, Table, Title } from "@mantine/core";
 import Chart from "react-apexcharts";
+import "../../style/dashboard.scss"
 
 const ChartCard = () => {
     return (
@@ -140,25 +141,25 @@ const ChartNews = () => {
                         Najnowsze wydarzenia
                     </Title>
                 </Card.Section>
-                <Table sx={{marginTop: "20px"}} >
+                <Table sx={{marginTop: "20px", tableLayout: "auto"}} >
                     <colgroup>
-                        <col></col>
-                        <col></col>
-                        <col></col>
-                        <col></col>
+                        <col width={"6%"}></col>
+                        <col style={{width: "30%"}}></col>
+                        <col style={{width: "auto"}}></col>
+                        <col style={{textAlign: "right"}} width={"15%"}></col>
                     </colgroup>
                     <thead>
                         <tr>
                             <th>
-                                Klient
+                                Status
                             </th>
                             <th>
-                                Status
+                                Klient
                             </th>
                             <th>
                                 Tytuł
                             </th>
-                            <th>
+                            <th style={{textAlign: "right"}}>
                                 Data rozpoczecia
                             </th>
                         </tr>
@@ -170,18 +171,26 @@ const ChartNews = () => {
                                     const tab = []
                                     for(let i = 0; i < 10; i++) {
                                         tab.push(
-                                            <tr>
+                                            <tr className={"EventsTabRow " + (() => {if (i%2 == 0) return "EventsTabRow_Ended";else if (i%3 == 0) return "EventsTabRow_Late"})()}>
                                                 <td>
-                                                    MDR
+                                                    <a>
+                                                        W trakcie
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    W trakcie
+                                                    <a>
+                                                        MDR
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                    Komputer sie zepsuł
+                                                    <a>
+                                                        Komputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsuł
+                                                    </a>
                                                 </td>
-                                                <td>
-                                                    2020-11-25 10:00:00
+                                                <td style={{textAlign: "right"}}>
+                                                    <a>
+                                                        2020-11-25 10:00:00
+                                                    </a>
                                                 </td>
                                             </tr>
                                         )

@@ -1,5 +1,6 @@
 import { createStyles, Group, Navbar } from "@mantine/core";
 import {IconHome,IconListDetails, IconAddressBook, IconUsers} from "@tabler/icons"
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme, _params, getref) => {
     return {
@@ -50,7 +51,7 @@ const useStyles = createStyles((theme, _params, getref) => {
 const NavButton = (text, path, icons) => {
     const {classes, cx} = useStyles()
     return (
-        <a className={cx(classes.link, {[classes.linkActive]: path == window.location.pathname}) }>
+        <Link to={path} className={cx(classes.link, {[classes.linkActive]: path == window.location.pathname}) }>
             {/* <IconHome className={classes.linkIcon}/> */}
             {
                 icons
@@ -61,7 +62,7 @@ const NavButton = (text, path, icons) => {
                     text
                 }
             </span>
-        </a>
+        </Link>
     )
 }
 
@@ -113,16 +114,16 @@ function NavbarView() {
                     NavButton("Dashboard", "/", <IconHome/>)
                 }
                 {
-                    NavButton("Wydarzenia", "/dsa", <IconListDetails/>)
+                    NavButton("Wydarzenia", "/events", <IconListDetails/>)
                 }
                 {
-                    NavButton("Klienci", "/ds", <IconAddressBook/>)
+                    NavButton("Klienci", "/clients", <IconAddressBook/>)
                 }
                 {
                     NavHeader("Zarządzaj")
                 }
                 {
-                    NavButton("Użytkownicy", "/dsa", <IconUsers/>)
+                    NavButton("Użytkownicy", "/users", <IconUsers/>)
                 }
 
             </Navbar.Section>
