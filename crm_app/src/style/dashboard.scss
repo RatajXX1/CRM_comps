@@ -1,8 +1,15 @@
+.EventsTable {
 
+    &:first-child() {
+        background-color: rgba(241, 242, 247, 0.75) !important;
+    }
+
+}
 
 .EventsTabRow {
     cursor: pointer;
-
+    position: relative;
+    
     a {
         display: block;
         width: 100%;
@@ -12,8 +19,26 @@
         text-overflow: ellipsis;
     }
 
+    td {
+        padding-right:10px;
+        border-collapse: separate;
+        border-spacing: 10px;
+        box-sizing: content-box;
+    }
+
+
     &:hover {
-        background-color: rgba(0, 45, 208, .1);
+        td{
+            background-color: rgba(0, 45, 208, .1);
+        }
+
+        td:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
     }
 
 }

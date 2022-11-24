@@ -2,12 +2,15 @@ import { AppShell, ScrollArea } from "@mantine/core";
 import HeaderView from "../Header";
 import NavbarView from "../Navbar";
 import DashboardView from "./dashboard";
+import EventsView from "./events";
 
 
 const PageSelect = () => {
     switch (window.location.pathname) {
         case "/":
             return <DashboardView/>
+        case "/events":
+            return <EventsView/>
     }
 }
 

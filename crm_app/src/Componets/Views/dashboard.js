@@ -141,7 +141,7 @@ const ChartNews = () => {
                         Najnowsze wydarzenia
                     </Title>
                 </Card.Section>
-                <Table sx={{marginTop: "20px", tableLayout: "auto"}} >
+                <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
                     <colgroup>
                         <col width={"6%"}></col>
                         <col style={{width: "30%"}}></col>
