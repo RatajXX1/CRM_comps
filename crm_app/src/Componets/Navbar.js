@@ -1,5 +1,5 @@
 import { createStyles, Group, Navbar } from "@mantine/core";
-import {IconHome,IconListDetails} from "@tabler/icons"
+import {IconHome,IconListDetails, IconAddressBook, IconUsers} from "@tabler/icons"
 
 const useStyles = createStyles((theme, _params, getref) => {
     return {
@@ -24,12 +24,12 @@ const useStyles = createStyles((theme, _params, getref) => {
                 // color: theme.colorScheme === 'dark' ? theme.white : theme.black,
                 // },
             },
+            '& > svg': {
+                color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
+                marginRight: theme.spacing.sm,
+            }
         },
       
-        linkIcon: {
-            color: theme.colorScheme === 'dark' ? theme.colors.dark[2] : theme.colors.gray[6],
-            marginRight: theme.spacing.sm,
-        },
       
         linkActive: {
             '&, &:hover': {
@@ -53,7 +53,7 @@ const NavButton = (text, path, icons) => {
         <a className={cx(classes.link, {[classes.linkActive]: path == window.location.pathname}) }>
             {/* <IconHome className={classes.linkIcon}/> */}
             {
-                <icons className={classes.linkIcon}//>
+                icons
             }
 
             <span>
@@ -110,19 +110,19 @@ function NavbarView() {
                     NavHeader("Ogólne")
                 }
                 {
-                    NavButton("Dashboard", "/")
+                    NavButton("Dashboard", "/", <IconHome/>)
                 }
                 {
-                    NavButton("Wydarzenia", "/dsa")
+                    NavButton("Wydarzenia", "/dsa", <IconListDetails/>)
                 }
                 {
-                    NavButton("Klienci", "/ds")
+                    NavButton("Klienci", "/ds", <IconAddressBook/>)
                 }
                 {
                     NavHeader("Zarządzaj")
                 }
                 {
-                    NavButton("Użytkownicy", "/dsa")
+                    NavButton("Użytkownicy", "/dsa", <IconUsers/>)
                 }
 
             </Navbar.Section>

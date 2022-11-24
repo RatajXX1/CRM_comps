@@ -144,13 +144,13 @@ const ChartNews = () => {
                     <thead>
                         <tr>
                             <th>
-                                ID
-                            </th>
-                            <th>
-                                Tytuł
+                                Klient
                             </th>
                             <th>
                                 Status
+                            </th>
+                            <th>
+                                Tytuł
                             </th>
                             <th>
                                 Data rozpoczecia
@@ -166,15 +166,13 @@ const ChartNews = () => {
                                         tab.push(
                                             <tr>
                                                 <td>
-                                                    {
-                                                        i
-                                                    }
-                                                </td>
-                                                <td>
-                                                    Komputer sie zepsuł
+                                                    MDR
                                                 </td>
                                                 <td>
                                                     W trakcie
+                                                </td>
+                                                <td>
+                                                    Komputer sie zepsuł
                                                 </td>
                                                 <td>
                                                     2020-11-25 10:00:00
