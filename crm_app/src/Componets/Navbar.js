@@ -1,5 +1,5 @@
 import { createStyles, Group, Navbar } from "@mantine/core";
-import {IconHome} from "@tabler/icons"
+import {IconHome,IconListDetails} from "@tabler/icons"
 
 const useStyles = createStyles((theme, _params, getref) => {
     return {
@@ -47,11 +47,15 @@ const useStyles = createStyles((theme, _params, getref) => {
     }
 })
 
-const NavButton = (text, path) => {
+const NavButton = (text, path, icons) => {
     const {classes, cx} = useStyles()
     return (
         <a className={cx(classes.link, {[classes.linkActive]: path == window.location.pathname}) }>
-            <IconHome className={classes.linkIcon}/>
+            {/* <IconHome className={classes.linkIcon}/> */}
+            {
+                <icons className={classes.linkIcon}//>
+            }
+
             <span>
                 {
                     text
@@ -61,7 +65,7 @@ const NavButton = (text, path) => {
     )
 }
 
-const NavHeader = () => {
+const NavHeader = (text) => {
     return (
         <b
             style={{
@@ -71,7 +75,9 @@ const NavHeader = () => {
                 letterSpacing: '1px'
             }}
         >
-            Ogólne
+            {
+                text
+            }
         </b>
     )
 }
@@ -101,7 +107,7 @@ function NavbarView() {
                 }}
             >
                 {
-                    NavHeader()
+                    NavHeader("Ogólne")
                 }
                 {
                     NavButton("Dashboard", "/")
@@ -110,8 +116,15 @@ function NavbarView() {
                     NavButton("Wydarzenia", "/dsa")
                 }
                 {
-                    NavButton("Dashboard", "/ds")
+                    NavButton("Klienci", "/ds")
                 }
+                {
+                    NavHeader("Zarządzaj")
+                }
+                {
+                    NavButton("Użytkownicy", "/dsa")
+                }
+
             </Navbar.Section>
         </Navbar>
     )

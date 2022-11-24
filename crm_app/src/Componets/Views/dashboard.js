@@ -1,4 +1,4 @@
-import { Card, Container, Flex, Group, Stack, Title } from "@mantine/core";
+import { Card, Container, Flex, Group, Stack, Table, Title } from "@mantine/core";
 import Chart from "react-apexcharts";
 
 const ChartCard = () => {
@@ -131,12 +131,80 @@ const ChartCard = () => {
     )
 }
 
+const ChartNews = () => {
+    return (
+        <Card shadow="sm" p="lg" radius="md" withBorder>
+            <Container fluid>
+                <Card.Section>
+                    <Title sx={{color: "#181818"}} order={2}>
+                        Najnowsze wydarzenia
+                    </Title>
+                </Card.Section>
+                <Table sx={{marginTop: "20px"}} >
+                    <thead>
+                        <tr>
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Tytuł
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                Data rozpoczecia
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            (
+                                () => {
+                                    const tab = []
+                                    for(let i = 0; i < 10; i++) {
+                                        tab.push(
+                                            <tr>
+                                                <td>
+                                                    {
+                                                        i
+                                                    }
+                                                </td>
+                                                <td>
+                                                    Komputer sie zepsuł
+                                                </td>
+                                                <td>
+                                                    W trakcie
+                                                </td>
+                                                <td>
+                                                    2020-11-25 10:00:00
+                                                </td>
+                                            </tr>
+                                        )
+                                    }
+                                    return tab
+                                }
+                            )()
+                        }
+                    </tbody>
+                </Table>
+            </Container>
+        </Card>
+    )
+}
 
 function DashboardView() {
     return (
-        <Stack>
+        <Stack
+            sx={{
+                width: "98%"
+            }}
+        >
             {
                 ChartCard()
+            }
+            {
+                ChartNews()
             }
         </Stack>
     )
