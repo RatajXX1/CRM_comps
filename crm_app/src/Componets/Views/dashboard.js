@@ -141,6 +141,12 @@ const ChartNews = () => {
                     </Title>
                 </Card.Section>
                 <Table sx={{marginTop: "20px"}} >
+                    <colgroup>
+                        <col></col>
+                        <col></col>
+                        <col></col>
+                        <col></col>
+                    </colgroup>
                     <thead>
                         <tr>
                             <th>
