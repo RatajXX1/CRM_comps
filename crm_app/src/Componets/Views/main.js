@@ -9,7 +9,7 @@ import UsersView from "./users";
 
 const PageSelect = () => {
     switch (window.location.pathname) {
-        case "/":
+        case "/dashboard":
             return <DashboardView/>
         case "/events":
             return <EventsView/>

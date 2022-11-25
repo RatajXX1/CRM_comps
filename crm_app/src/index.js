@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import LoginView from './Componets/Views/login';
 import MainView from './Componets/Views/main';
 import './index.css';
 // import App from './App';
@@ -12,7 +13,8 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<MainView/>}/>
+        <Route path='/' element={<LoginView/>}/>
+        <Route path='/dashboard' element={<MainView/>}/>
         <Route path='/events' element={<MainView/>}/>
         <Route path='/clients' element={<MainView/>}/>
         <Route path='/users' element={<MainView/>}/>
