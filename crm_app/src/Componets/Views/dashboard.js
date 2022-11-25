@@ -1,4 +1,4 @@
-import { Card, Container, Flex, Group, Stack, Table, Title } from "@mantine/core";
+import { Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
 import Chart from "react-apexcharts";
 import "../../style/dashboard.scss"
 
@@ -33,11 +33,11 @@ const ChartCard = () => {
                                 },
                                 legend: {
                                     formatter: function(label, opts) {
-                                        return opts.w.globals.series[opts.seriesIndex] + "% " + label 
+                                        return "  "+opts.w.globals.series[opts.seriesIndex] + "% " + label
                                     },
-                                    fontSize: "14px"
+                                    fontSize: "13px"
                                 },
-                                labels: ['Zakończone', 'Opoźnione', 'Rozpoczetę', 'W trakcie'],
+                                labels: ['Zakończone', 'Opoźnione', 'W trakcie'],
                                 fill: {
                                     colors: ["#96ADFF", "#6284FD", "#2D5BFF"]
                                 },
@@ -48,7 +48,7 @@ const ChartCard = () => {
                             }}
                             
                             series={[
-                                44, 55, 41, 17
+                                44, 55, 17
                             ]}
                             type="donut"
                             width="100%"
@@ -143,7 +143,7 @@ const ChartNews = () => {
                 </Card.Section>
                 <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
                     <colgroup>
-                        <col width={"9%"}></col>
+                        <col width={"10%"}></col>
                         <col style={{width: "30%"}}></col>
                         <col style={{width: "auto"}}></col>
                         <col style={{textAlign: "right"}} width={"15%"}></col>
