@@ -1,4 +1,4 @@
-import { Card, Container, Stack, Title } from "@mantine/core";
+import { Button, Card, Container, Stack, Title } from "@mantine/core";
 import TableView from "../CRM_table";
 
 
@@ -13,8 +13,16 @@ function EventsView() {
         >
             <Card sx={{height: "80vh"}} shadow="sm" p="lg" radius="md" withBorder>
                 <Container fluid sx={{height: "100%"}}>
-                    <Card.Section>
-                        <Title order={2}>Wydarzenia</Title>
+                    <Card.Section sx={{width: "100%", margin: "10px 0 10px 0"}}>
+                        <Button
+                            sx={{
+                                float:"right",
+                                backgroundColor: "rgba(0, 45, 208, .1)",
+                                color: "#2D5BFF"
+                            }}
+                        >
+                            Filtry
+                        </Button>
                     </Card.Section>
                     <TableView
                         headers={
@@ -30,95 +38,23 @@ function EventsView() {
                         data={
                             [
                                 {
-                                    Name:"dsaD",
+                                    Name:1,
                                     Client: "dasa",
                                     tittle: "dasa",
                                     dates: "20202-10-10 10:00:00"
-                                },
+                                },            
                                 {
-                                    Name:"dsa",
+                                    Name:2,
                                     Client: "dasa",
                                     tittle: "dasa",
                                     dates: "20202-10-10 10:00:00"
-                                },
+                                },  
                                 {
-                                    Name:"dsa",
+                                    Name:0,
                                     Client: "dasa",
                                     tittle: "dasa",
                                     dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsaD",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsaD",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },
-                                {
-                                    Name:"dsa",
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                }                                                                
+                                },                                                                                    
                             ]
                         }
                         
@@ -135,9 +71,15 @@ function EventsView() {
                         render={
                             (data) => <tr className="EventsTabRow">
                                 <td>
-                                    <a>
+                                    <a className={(() => {if (data.Name == 0) return "EventsTabRow_state_work"; else if (data.Name == 1) return "EventsTabRow_state_end"; else if (data.Name == 2) return "EventsTabRow_state_succes"})()}>
                                         {
-                                            data.Name
+                                            (
+                                                () => {
+                                                    if (data.Name == 0) return "W trakcie"
+                                                    else if (data.Name == 1) return "Opóznione"
+                                                    else if (data.Name == 2) return "Zakończne"
+                                                }
+                                            )() 
                                         }
                                     </a>
                                 </td>

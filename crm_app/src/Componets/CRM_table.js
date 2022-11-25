@@ -61,9 +61,9 @@ class TableView extends React.Component {
                 a = Object.values(a)
                 b = Object.values(b)
                 if (this.state.reversedSort) {
-                    return b[this.state.SortBy].localeCompare(a[this.state.SortBy])
+                    return b[this.state.SortBy].toString().localeCompare(a[this.state.SortBy].toString())
                 }
-                return a[this.state.SortBy].localeCompare(b[this.state.SortBy])
+                return a[this.state.SortBy].toString().localeCompare(b[this.state.SortBy].toString())
             }
         )
         this.forceUpdate()
