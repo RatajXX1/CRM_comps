@@ -10,7 +10,9 @@ class TableView extends React.Component {
         this.state = {
             Headers:[],
             Sizes: [],
-            Data:[]
+            Data:[],
+            SortBy: null,
+            reversedSort: false
         }
 
         this.style = createStyles(
@@ -53,6 +55,20 @@ class TableView extends React.Component {
         this.forceUpdate()
     }
 
+    SortData() {
+        this.state.Data = this.state.Data.sort(
+            (a,b) => {
+                a = Object.values(a)
+                b = Object.values(b)
+                if (this.state.reversedSort) {
+                    return b[this.state.SortBy].localeCompare(a[this.state.SortBy])
+                }
+                return a[this.state.SortBy].localeCompare(b[this.state.SortBy])
+            }
+        )
+        this.forceUpdate()
+    }
+
     render() {
         const TabHe = (props) => {
             const {children, reversed, sorted, onSort} = props
@@ -60,7 +76,7 @@ class TableView extends React.Component {
             const Icon = sorted ? (reversed ? IconChevronUp : IconChevronDown) : IconSelector;
             return (
                 <th className={classes.th}> 
-                    <UnstyledButton className={classes.control}>
+                    <UnstyledButton onClick={onSort} className={classes.control}>
                         <Group position="apart">
                             <Text weight={500} size="sm">
                                 {
@@ -76,9 +92,17 @@ class TableView extends React.Component {
             )
         }
 
+        const SetSorting = (index) => {
+            const reversed = index === this.state.SortBy ? !this.state.reversedSort : false;
+            this.state.reversedSort = reversed
+            this.state.SortBy = index
+            this.SortData()
+            this.forceUpdate()
+        }
+
         return (
-            <ScrollArea sx={{width: "100%"}}>
-                <Table  sx={{tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}}>
+            <ScrollArea type="always" offsetScrollbars sx={{width: "100%", height: "100%"}}>
+                <Table  sx={{tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px", width: "99%", paddingBottom: "20px"}}>
                     <colgroup>
                         {
                             (
@@ -100,12 +124,12 @@ class TableView extends React.Component {
                                     () => {
                                         const tab = []
                                         this.state.Headers.forEach(
-                                            e => {
+                                            (e,i) => {
                                                 tab.push(
                                                     <TabHe
-                                                        sorted={false}
-                                                        reversed={false}
-                                                        onSort={() => false}
+                                                        sorted={this.state.SortBy == i}
+                                                        reversed={this.state.reversedSort}
+                                                        onSort={() => SetSorting(i)}
                                                     >
                                                         {
                                                             e

@@ -30,7 +30,7 @@ function EventsView() {
                         data={
                             [
                                 {
-                                    Name:"dsa",
+                                    Name:"dsaD",
                                     Client: "dasa",
                                     tittle: "dasa",
                                     dates: "20202-10-10 10:00:00"
@@ -59,6 +59,66 @@ function EventsView() {
                                     tittle: "dasa",
                                     dates: "20202-10-10 10:00:00"
                                 },
+                                {
+                                    Name:"dsaD",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsaD",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                },
+                                {
+                                    Name:"dsa",
+                                    Client: "dasa",
+                                    tittle: "dasa",
+                                    dates: "20202-10-10 10:00:00"
+                                }                                                                
                             ]
                         }
                         
@@ -103,7 +163,7 @@ function EventsView() {
                                     </a>
                                 </td>
                                 <td>
-                                    <a>
+                                    <a style={{textAlign: "right"}}>
                                         --
                                     </a>
                                 </td>
