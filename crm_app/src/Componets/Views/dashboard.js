@@ -143,7 +143,7 @@ const ChartNews = () => {
                 </Card.Section>
                 <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
                     <colgroup>
-                        <col width={"6%"}></col>
+                        <col width={"9%"}></col>
                         <col style={{width: "30%"}}></col>
                         <col style={{width: "auto"}}></col>
                         <col style={{textAlign: "right"}} width={"15%"}></col>
@@ -171,10 +171,18 @@ const ChartNews = () => {
                                     const tab = []
                                     for(let i = 0; i < 10; i++) {
                                         tab.push(
-                                            <tr className={"EventsTabRow " + (() => {if (i%2 == 0) return "EventsTabRow_Ended";else if (i%3 == 0) return "EventsTabRow_Late"})()}>
+                                            <tr className={"EventsTabRow"}>
                                                 <td>
-                                                    <a>
-                                                        W trakcie
+                                                    <a className={(() => {if (i%2 == 0) return "EventsTabRow_state_work"; else if (i%2  == 1) return "EventsTabRow_state_end"; else if (i%2  == 2) return "EventsTabRow_state_succes"})()}>
+                                                    {
+                                                        (
+                                                            () => {
+                                                                if (i%2 == 0) return "W trakcie"
+                                                                else if (i%2 == 1) return "Opóznione"
+                                                                else if (i%2 == 2) return "Zakończne"
+                                                            }
+                                                        )() 
+                                                    }
                                                     </a>
                                                 </td>
                                                 <td>

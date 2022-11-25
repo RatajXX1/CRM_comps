@@ -4,7 +4,7 @@ import TableView from "../CRM_table";
 
 
 
-function EventsView() {
+function UsersView() {
     return (
         <Stack
             sx={{
@@ -133,4 +133,4 @@ function EventsView() {
     )
 }
 
-export default EventsView;
+export default UsersView;
