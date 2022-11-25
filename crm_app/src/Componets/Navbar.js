@@ -111,7 +111,7 @@ function NavbarView() {
                     NavHeader("Ogólne")
                 }
                 {
-                    NavButton("Dashboard", "/", <IconHome/>)
+                    NavButton("Dashboard", "/dashboard", <IconHome/>)
                 }
                 {
                     NavButton("Wydarzenia", "/events", <IconListDetails/>)
