@@ -1,10 +1,13 @@
 import { Button, Card, Container, Stack, Title } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import TableView from "../CRM_table";
 
 
 
 
 function ClientsView() {
+    const navi = useNavigate()
+
     return (
         <Stack
             sx={{
@@ -15,6 +18,7 @@ function ClientsView() {
                 <Container fluid sx={{height: "100%"}}>
                     <Card.Section sx={{width: "100%", margin: "10px 0 10px 0"}}>
                         <Button
+                            onClick={() => navi("/add/clients")}
                             sx={{
                                 float:"left",
                                 backgroundColor: "rgba(0, 45, 208, .1)",

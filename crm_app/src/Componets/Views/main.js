@@ -1,10 +1,12 @@
 import { AppShell, ScrollArea } from "@mantine/core";
 import HeaderView from "../Header";
 import NavbarView from "../Navbar";
+import AddClientView from "./addclients";
 import AddEventsView from "./addevents";
 import ClientsView from "./clients";
 import DashboardView from "./dashboard";
 import EventsView from "./events";
+import ShovEventsView from "./ShowEvent";
 import UsersView from "./users";
 
 
@@ -16,6 +18,10 @@ const PageSelect = () => {
             return <EventsView/>
         case "/add/events":
             return <AddEventsView/>
+        case "/show/events":
+            return <ShovEventsView/>            
+        case "/add/clients":
+            return <AddClientView/>        
         case "/clients":
             return <ClientsView/>
         case "/users":
