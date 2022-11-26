@@ -1,10 +1,11 @@
-import { Button, Card, Container, Stack, Title } from "@mantine/core";
+import { Button, Card, Container, Modal, Select, Stack, TextInput, Title } from "@mantine/core";
+import { useState } from "react";
 import TableView from "../CRM_table";
-
-
-
+import {IconPlus} from "@tabler/icons"
 
 function UsersView() {
+    const [Open, SetOpen] = useState(false)
+
     return (
         <Stack
             sx={{
@@ -12,6 +13,61 @@ function UsersView() {
             }}
         >
             <Card sx={{height: "80vh"}} shadow="sm" p="lg" radius="md" withBorder>
+                <Modal
+                    opened={Open}
+                    onClose={() => SetOpen(false)}
+                    title={"Dodaj nowego użytkownika"}>
+                    <Container fluid>
+                        <form>
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                label="Login"
+                                placeholder="Login"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                type="password"
+                                label="Hasło"
+                                placeholder="Hasło"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                label="Adres email"
+                                type={"email"}
+                                placeholder="Adres email"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <Select
+                                label="Ranga"
+                                placeholder="Ranga"
+                                variant="filled"
+                                radius="md"
+                                data={[
+                                    { value: 0, label: 'Użytkownik' },
+                                    { value: 1, label: 'Administrator' },
+                                ]}
+                            />
+                            <Button 
+                                rightIcon={<IconPlus/>}
+                                type="submit"
+                                sx={{
+                                    color: "#2D5BFF",
+                                    float: "right",
+                                    marginTop: "30px",
+                                    backgroundColor: "rgba(0, 45, 208, .1)",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(0, 45, 208, .25)"
+                                    },
+                                }}
+                            >Dodaj</Button>
+                        </form>
+                    </Container>
+                </Modal>
                 <Container fluid sx={{height: "100%"}}>
                     <Card.Section sx={{width: "100%", margin: "10px 0 10px 0"}}>
                         <Button
@@ -23,6 +79,7 @@ function UsersView() {
                                     backgroundColor: "rgba(0, 45, 208, .25)"
                                 }
                             }}
+                            onClick={() => SetOpen(true)}
                         >
                             Dodaj nowego użytkownika
                         </Button>
