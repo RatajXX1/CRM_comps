@@ -18,6 +18,7 @@ root.render(
         <Route path='/events' element={<MainView/>}/>
         <Route path='/clients' element={<MainView/>}/>
         <Route path='/users' element={<MainView/>}/>
+        <Route path='/add/events' element={<MainView/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,5 +1,5 @@
-import { Autocomplete, Button, Container, Group, Header } from "@mantine/core";
-import {IconUserCircle,IconChevronDown,IconSearch} from "@tabler/icons"
+import { Autocomplete, Button, Container, Divider, Group, Header, Menu } from "@mantine/core";
+import {IconUserCircle,IconChevronDown,IconSearch, IconLogout} from "@tabler/icons"
 
 function HeaderView() {
     return (
@@ -42,21 +42,37 @@ function HeaderView() {
                         top: "50%",
                         transform: "translate(0,-50%)",
                     }}
-                >
-                    <Button
-                        variant="subtle"
-                        leftIcon={<IconUserCircle/>}
-                        rightIcon={<IconChevronDown/>}
-                        sx={{
-                            color: "rgba(0, 45, 208, .75)",
-                            // backgroundColor: "#F1F3F8",
-                            "&:hover": {
-                                backgroundColor: "rgba(0, 45, 208, .1)"
-                            }
-                        }}
-                    >
-                        root
-                    </Button>
+                >   
+                    <Menu shadow="md" width={200}>
+                        <Menu.Target>
+                            <Button
+                                variant="subtle"
+                                leftIcon={<IconUserCircle/>}
+                                rightIcon={<IconChevronDown/>}
+                                sx={{
+                                    color: "rgba(0, 45, 208, .75)",
+                                    // backgroundColor: "#F1F3F8",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(0, 45, 208, .1)"
+                                    }
+                                }}
+                            >
+                                root
+                            </Button>
+                        </Menu.Target>
+                        <Menu.Dropdown>
+                            <Menu.Label><b>root</b></Menu.Label>
+                            <Menu.Label>root@mail.com</Menu.Label>
+                            <Divider my={"sm"} variant='dashed'/>        
+                            <Menu.Item sx={{                                    
+                                // backgroundColor: "rgba(0, 45, 208, .1)",
+                                color: "#2D5BFF",
+                                "&:hover": {
+                                    backgroundColor: "rgba(0, 45, 208, .1)"
+                                }}} 
+                                icon={<IconLogout/>}>Wyloguj się</Menu.Item>
+                        </Menu.Dropdown>
+                    </Menu>
                 </Group>
             </Container>
         </Header>

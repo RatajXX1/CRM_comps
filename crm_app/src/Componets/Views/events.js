@@ -1,10 +1,10 @@
 import { Button, Card, Container, Stack, Title } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import TableView from "../CRM_table";
 
-
-
-
 function EventsView() {
+    const history = useNavigate()
+
     return (
         <Stack
             sx={{
@@ -35,6 +35,7 @@ function EventsView() {
                                     backgroundColor: "rgba(0, 45, 208, .25)"
                                 }
                             }}
+                            onClick={() => history("/add/events")}
                         >
                             Dodaj nowe
                         </Button>
