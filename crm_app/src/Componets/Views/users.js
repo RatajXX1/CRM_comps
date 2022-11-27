@@ -1,10 +1,11 @@
 import { Button, Card, Container, Modal, Select, Stack, TextInput, Title } from "@mantine/core";
 import { useState } from "react";
 import TableView from "../CRM_table";
-import {IconPlus} from "@tabler/icons"
+import {IconPlus, IconDeviceFloppy} from "@tabler/icons"
 
 function UsersView() {
     const [Open, SetOpen] = useState(false)
+    const [ModOpen, SetModOpen] = useState(false)
 
     return (
         <Stack
@@ -68,6 +69,61 @@ function UsersView() {
                         </form>
                     </Container>
                 </Modal>
+                <Modal
+                    opened={ModOpen}
+                    onClose={() => SetModOpen(false)}
+                    title={"Edycja użytkownika"}>
+                    <Container fluid>
+                        <form>
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                label="Login"
+                                placeholder="Login"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                type="password"
+                                label="Hasło"
+                                placeholder="Hasło"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <TextInput
+                                sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
+                                label="Adres email"
+                                type={"email"}
+                                placeholder="Adres email"
+                                variant="filled"
+                                radius="md"
+                            />
+                            <Select
+                                label="Ranga"
+                                placeholder="Ranga"
+                                variant="filled"
+                                radius="md"
+                                data={[
+                                    { value: 0, label: 'Użytkownik' },
+                                    { value: 1, label: 'Administrator' },
+                                ]}
+                            />
+                            <Button 
+                                rightIcon={<IconDeviceFloppy/>}
+                                type="submit"
+                                sx={{
+                                    color: "#2D5BFF",
+                                    float: "right",
+                                    marginTop: "30px",
+                                    backgroundColor: "rgba(0, 45, 208, .1)",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(0, 45, 208, .25)"
+                                    },
+                                }}
+                            >Zapisz</Button>
+                        </form>
+                    </Container>
+                </Modal>
                 <Container fluid sx={{height: "100%"}}>
                     <Card.Section sx={{width: "100%", margin: "10px 0 10px 0"}}>
                         <Button
@@ -118,7 +174,7 @@ function UsersView() {
                         }
 
                         render={
-                            (data) => <tr className="EventsTabRow">
+                            (data) => <tr onClick={() => SetModOpen(true)} className="EventsTabRow">
                                 <td>
                                     <a>
                                         {

@@ -62,7 +62,7 @@ function ClientsView() {
                         }
 
                         render={
-                            (data) => <tr className="EventsTabRow">
+                            (data) => <tr onClick={() => navi("/show/client")} className="EventsTabRow">
                                 <td>
                                     <a>
                                         {

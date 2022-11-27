@@ -108,3 +108,13 @@
     transform: translate(-50%, -50%);
     border-radius: 10px;
 }
+
+.mantine-Select-item[data-selected] {
+    background-color: rgba(0, 45, 208, .1);
+    color: #2D5BFF;
+
+    &:hover {
+        background-color: rgba(0, 45, 208, .25);
+    }
+
+}

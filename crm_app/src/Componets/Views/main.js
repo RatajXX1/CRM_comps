@@ -6,6 +6,7 @@ import AddEventsView from "./addevents";
 import ClientsView from "./clients";
 import DashboardView from "./dashboard";
 import EventsView from "./events";
+import ShowClientView from "./ShowClient";
 import ShovEventsView from "./ShowEvent";
 import UsersView from "./users";
 
@@ -19,7 +20,9 @@ const PageSelect = () => {
         case "/add/events":
             return <AddEventsView/>
         case "/show/events":
-            return <ShovEventsView/>            
+            return <ShovEventsView/>
+        case "/show/client":
+            return <ShowClientView/>            
         case "/add/clients":
             return <AddClientView/>        
         case "/clients":
