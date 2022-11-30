@@ -11,7 +11,7 @@ import { ProtectedRoute } from './Utilis/ProtectedRoute';
 
 const root = ReactDOM.createRoot(document.body);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<LoginView/>}/>
@@ -25,7 +25,7 @@ root.render(
         <Route path='/show/client' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
+  /* </React.StrictMode> */
 );
 
 // If you want to start measuring performance in your app, pass a function

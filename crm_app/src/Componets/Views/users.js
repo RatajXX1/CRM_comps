@@ -150,18 +150,6 @@ function UsersView() {
                                 "Data dodania",
                             ]
                         }
-
-                        data={
-                            [
-                                {
-                                    ID:1,
-                                    Type: 1,
-                                    tittle: "root",
-                                    email: "root@mail.com",
-                                    dates: "20202-10-10 10:00:00"
-                                }                                                                                 
-                            ]
-                        }
                         
                         sizes={
                             [
@@ -171,6 +159,16 @@ function UsersView() {
                                 {width: "15%"},
                                 {width: "15%", textAlign: "right"},
                             ]
+                        }
+
+                        StartPage={1}
+
+                        PaginationFunc={
+                            (page) => `/api/users/index.php?page=${page}`
+                        }
+
+                        ResponseFunc={
+                            resp => resp.Users
                         }
 
                         render={
@@ -204,7 +202,12 @@ function UsersView() {
                                 <td>
                                     <a>
                                         {
-                                            data.email
+                                            (
+                                                () => {
+                                                    if (data.email.replaceAll(" ", "") == "") return "--"
+                                                    else return data.email
+                                                }
+                                            )()
                                         }
                                     </a>
                                 </td>

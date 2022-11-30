@@ -19,9 +19,9 @@ if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($page)) {
         while ($row = $resoult->fetch_assoc()) {
             $users[] = array(
                 'ID' => $row['ID'],
-                'Created' => $row['Created'],
-                'Login' => $row['Login'],
-                'Email' => $row['Email'],
+                'dates' => $row['Created'],
+                'tittle' => $row['Login'],
+                'email' => $row['Email'],
                 'Type' => $row['Rank_type'],
             );
         }

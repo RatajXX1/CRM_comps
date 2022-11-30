@@ -2,6 +2,7 @@ import { Center, createStyles, Group, ScrollArea, Table, Text, UnstyledButton } 
 import React from "react";
 import { IconSelector, IconChevronDown, IconChevronUp, IconSearch } from '@tabler/icons';
 import "../style/dashboard.scss"
+import Server from "../Utilis/Server";
 
 class TableView extends React.Component {
 
@@ -12,8 +13,12 @@ class TableView extends React.Component {
             Sizes: [],
             Data:[],
             SortBy: null,
-            reversedSort: false
+            reversedSort: false,
+            Page: 0,
+            PageLimit: 25,
+            canLoad: true,
         }
+        this.Area = React.createRef()
 
         this.style = createStyles(
             (theme) => {
@@ -52,7 +57,43 @@ class TableView extends React.Component {
         if (this.props.sizes !== undefined) {
             this.state.Sizes = this.props.sizes
         }
+        if (this.props.StartPage !== undefined) {
+            this.state.Page = this.props.StartPage
+        }
+        if (this.props.PageLimit !== undefined) {
+            this.state.PageLimit = this.props.PageLimit
+        }
+        if (this.state.canLoad) this.DownloadData()
         this.forceUpdate()
+    }
+
+    async DownloadData() {
+        if (this.props.PaginationFunc !== undefined && this.props.ResponseFunc !== undefined) {
+            await Server.ApiInstance()
+                .get(this.props.PaginationFunc(this.state.Page))
+                .then(
+                    resp => {
+                        let dat = this.props.ResponseFunc(resp.data)
+
+                        if (Object.entries(dat).length >= this.state.PageLimit) this.state.canLoad = true
+                        else this.state.canLoad = false
+
+                        if (this.state.Data.length == 0) this.state.Data = dat
+                        else this.state.Data = this.state.Data.concat(dat)
+                        // this.state.Page += 1
+                        this.forceUpdate()
+                    }
+                )
+        }
+    }
+
+    scrollChange(x) {
+        if (x.x >= (this.Area.current.scrollTopMax - 100) && this.state.canLoad) {
+            this.state.canLoad = false
+            this.state.Page += 1
+            this.DownloadData()
+        }
+        // console.log(x, "Area wyskoskosc =", this.Area.current.scrollTopMax)
     }
 
     SortData() {
@@ -101,7 +142,7 @@ class TableView extends React.Component {
         }
 
         return (
-            <ScrollArea type="always" offsetScrollbars sx={{width: "100%", height: "100%"}}>
+            <ScrollArea viewportRef={this.Area} onScrollPositionChange={(x,y) => this.scrollChange(x,y)} type="always" offsetScrollbars sx={{width: "100%", height: "100%"}}>
                 <Table  sx={{tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px", width: "99%", paddingBottom: "20px"}}>
                     <colgroup>
                         {
@@ -117,8 +158,8 @@ class TableView extends React.Component {
                             )()
                         }
                     </colgroup>
-                    <thead>
-                        <tr>
+                    <thead style={{position:'sticky', top: "0", backgroundColor: "white", zIndex: "3"}}>
+                        <tr style={{ backgroundColor: "white"}}>
                             {
                                 (
                                     () => {
