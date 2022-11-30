@@ -1,7 +1,16 @@
 import { Autocomplete, Button, Container, Divider, Group, Header, Menu } from "@mantine/core";
 import {IconUserCircle,IconChevronDown,IconSearch, IconLogout} from "@tabler/icons"
+import { useNavigate } from "react-router-dom";
+import Server from "../Utilis/Server";
 
-function HeaderView() {
+function HeaderView(props) {
+    const navi = useNavigate()
+
+    const LogOut = () => {
+        Server.ApiInstance().get("/api/auth/logout.php")
+            .then(() => navi("/"))
+    }
+
     return (
         <Header
             height={64}
@@ -57,12 +66,14 @@ function HeaderView() {
                                     }
                                 }}
                             >
-                                root
+                                {
+                                    props.UserData.Login
+                                }
                             </Button>
                         </Menu.Target>
                         <Menu.Dropdown>
-                            <Menu.Label><b>root</b></Menu.Label>
-                            <Menu.Label>root@mail.com</Menu.Label>
+                            <Menu.Label><b>{props.UserData.Login}</b></Menu.Label>
+                            <Menu.Label>{props.UserData.Email}</Menu.Label>
                             <Divider my={"sm"} variant='dashed'/>        
                             <Menu.Item sx={{                                    
                                 // backgroundColor: "rgba(0, 45, 208, .1)",
@@ -70,6 +81,7 @@ function HeaderView() {
                                 "&:hover": {
                                     backgroundColor: "rgba(0, 45, 208, .1)"
                                 }}} 
+                                onClick={()=> LogOut()}
                                 icon={<IconLogout/>}>Wyloguj się</Menu.Item>
                         </Menu.Dropdown>
                     </Menu>

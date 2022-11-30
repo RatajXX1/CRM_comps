@@ -83,7 +83,7 @@ const NavHeader = (text) => {
     )
 }
 
-function NavbarView() {
+function NavbarView(props) {
 
     return (
         <Navbar
@@ -120,10 +120,10 @@ function NavbarView() {
                     NavButton("Klienci", "/clients", <IconAddressBook/>)
                 }
                 {
-                    NavHeader("Zarządzaj")
+                   props.UserData.Rank_type > 1 && NavHeader("Zarządzaj")
                 }
                 {
-                    NavButton("Użytkownicy", "/users", <IconUsers/>)
+                    props.UserData.Rank_type > 1 && NavButton("Użytkownicy", "/users", <IconUsers/>)
                 }
 
             </Navbar.Section>

@@ -32,11 +32,11 @@ const PageSelect = () => {
     }
 }
 
-function MainView() {
+function MainView(props) {
     return (
         <AppShell
-            header={<HeaderView/>}
-            navbar={<NavbarView/>}
+            header={<HeaderView UserData={props.User_data}/>}
+            navbar={<NavbarView UserData={props.User_data}/>}
             sx={{
                 height: "90vh",
                 ".mantine-AppShell-main": {
