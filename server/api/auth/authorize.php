@@ -9,15 +9,13 @@ $sql_cursor = sql_con();
 if (enter_to_view($sql_cursor)) {
     $User_ID = GetUserIDbySession($sql_cursor);
     if ($User_ID > 0) {
-        $resoult = $sql_cursor->query("SELECT Image, Name, Surrname, Email, Rank_type FROM Users WHERE ID = " . $User_ID);
+        $resoult = $sql_cursor->query("SELECT Login, Email, Rank_type FROM Users WHERE ID = " . $User_ID);
         $resoult = $resoult->fetch_assoc();
         echo json_encode(array(
             'CODE' => 'OK',
             'Mess' => 'Poprawnie zautoryzowano!',
             'DATA' => array(
-                'Image' => $resoult['Image'],
-                'Name' => $resoult['Name'],
-                'Surrname' => $resoult['Surrname'],
+                'Login' => $resoult['Login'],
                 'Email' => $resoult['Email'],
                 'Rank_type' => $resoult['Rank_type']
             )

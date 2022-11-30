@@ -19,7 +19,7 @@ export class ProtectedRoute extends React.Component {
             .get("/api/auth/authorize.php")
             .then(
                 resp => {
-                    if (resp.data.CODE !== "OK") {
+                    if (resp.data.CODE == "OK") {
                         this.setState({Logged: true, user_data: resp.data.DATA, checked: true})
                     } else {
                         this.setState({Logged: false, user_data: null, checked: true})
