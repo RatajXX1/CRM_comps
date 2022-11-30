@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginView from './Componets/Views/login';
 import MainView from './Componets/Views/main';
 import './index.css';
+import { ProtectedRoute } from './Utilis/ProtectedRoute';
 // import App from './App';
 
 // import reportWebVitals from './reportWebVitals';
@@ -14,14 +15,14 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<LoginView/>}/>
-        <Route path='/dashboard' element={<MainView/>}/>
-        <Route path='/events' element={<MainView/>}/>
-        <Route path='/clients' element={<MainView/>}/>
-        <Route path='/users' element={<MainView/>}/>
-        <Route path='/add/events' element={<MainView/>}/>
-        <Route path='/add/clients' element={<MainView/>}/>
-        <Route path='/show/events' element={<MainView/>}/>
-        <Route path='/show/client' element={<MainView/>}/>
+        <Route path='/dashboard' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/events' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/clients' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/users' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/add/events' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/add/clients' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/show/events' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
+        <Route path='/show/client' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

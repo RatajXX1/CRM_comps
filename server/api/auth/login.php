@@ -16,8 +16,8 @@ function checkStructure() {
     if (array_key_exists('login', $data) &&
         array_key_exists('password', $data) &&
         array_key_exists('Auto_login', $data)) {
-        $data['login'] = filter_var($data['login'], FILTER_SANITIZE_EMAIL);
-        if (is_bool($data['Auto_login']) && filter_var($data['login'], FILTER_VALIDATE_EMAIL)) {
+        // $data['login'] = filter_var($data['login'], FILTER_SANITIZE_EMAIL);
+        if (is_bool($data['Auto_login'])) {
             return true;
         } else return false;
     } else return false;
@@ -30,7 +30,7 @@ if (checkStructure()) {
     $data['password'] = hash('sha256', $data['password']);
     $data['login'] = filter_var($data['login'], FILTER_SANITIZE_EMAIL);
 
-    $resoult = $sql_cursor->query("SELECT ID FROM Users WHERE Email = '{$data['login']}' and  Password = '{$data['password']}' LIMIT 1");
+    $resoult = $sql_cursor->query("SELECT ID FROM Users WHERE Login = '{$data['login']}' and  Password = '{$data['password']}' LIMIT 1");
     if ($resoult->num_rows > 0) {
         $resoult = $resoult->fetch_assoc();
         if (CreateSession($sql_cursor, $resoult['ID'], $data['Auto_login'])) {
@@ -49,7 +49,8 @@ if (checkStructure()) {
         echo json_encode(array(
             'CODE' => 'NO',
             'Mess' => 'Złe hasło bądż adres e-mail lub konto nie istnieje!',
-        ));
+            'pass' => $data['password']
+        )); 
     }
     $sql_cursor->close();
 } else {

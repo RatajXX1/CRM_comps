@@ -1,18 +1,48 @@
-import { Button, Container, Group, Paper, TextInput, Title } from "@mantine/core";
+import { Alert, Button, Container, Group, Notification, Paper, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {IconChevronRight,IconKey,IconPassword} from "@tabler/icons"
+import { useState } from "react";
+import Server from "../../Utilis/Server";
+import { IconX } from '@tabler/icons';
 
 function LoginView() {
+    const [Notfi, SetNotfi] = useState(false)
+    const [NotfiText, SetNotfiText] = useState("")
 
     const LoginForm = useForm({
         initialValues: {
-            Login: "",
-            Password: ""
+            login: "",
+            password: "",
+            Auto_login: false
         }
     })
 
+    const NotfiUP = (text) => {
+        SetNotfi(true)
+        SetNotfiText(text)
+    }
+
     const ProccedLogin = (valss) => {
-        window.location.href = "/dashboard"
+        // window.location.href = "/dashboard"
+        SetNotfi(true)
+        Server.ApiInstance().post(
+            "/api/auth/login.php",
+            {...valss}
+        ).then( 
+            resp => {
+                if (resp.data.CODE != "NO") {
+                    window.location.href = "/dashboard"
+                } else {
+                    NotfiUP(resp.data.Mess)
+                }   
+            }
+        )
+        .catch(
+            err => {
+                NotfiUP("Wystapił błąd spróbuj ponownie później!")
+            }
+        )
+
     }
 
     return (
@@ -23,6 +53,7 @@ function LoginView() {
                 backgroundColor: "rgba(241, 242, 247, 0.75)",
             }}
         >
+
             <Container 
                 sx={{
                     position: "relative",
@@ -30,7 +61,15 @@ function LoginView() {
                     transform: "translate(0, -50%)"
                 }}
                 size={"400px"}
+                
             >
+                            {
+                Notfi && <Alert sx={{bottom: "20px"}} onClose={() => SetNotfi(false)} icon={<IconX size={18} />} color="red">
+                    {
+                        NotfiText
+                    }
+                </Alert>
+            }
                 <Paper sx={{height: "350px"}} shadow="xs" radius="xs" p="md">
                     <Title sx={{color: "#2D5BFF"}} order={2}>
                         Logowanie
@@ -53,7 +92,7 @@ function LoginView() {
                             placeholder="Użytkownik"
                             variant="filled"
                             radius="md"
-                            {...LoginForm.getInputProps('Login')}
+                            {...LoginForm.getInputProps('login')}
                         />
 
                         <TextInput
@@ -64,7 +103,7 @@ function LoginView() {
                             radius="md"
                             label="Hasło"
                             placeholder="Hasło"
-                            {...LoginForm.getInputProps('Password')}
+                            {...LoginForm.getInputProps('password')}
                         />
                         
                         <Group sx={{

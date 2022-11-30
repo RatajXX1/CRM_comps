@@ -1,8 +1,8 @@
 <?php
 
-$MYSQL_USER = "rootdat";
-$MYSQL_PASSWORD = "password";
-$MYSQL_DATABASE = "edu_platform";
+$MYSQL_USER = "root";
+$MYSQL_PASSWORD = "root";
+$MYSQL_DATABASE = "CRM";
 $MYSQL_HOST = "localhost";
 $MYSQL_PORT = 3306;
 
