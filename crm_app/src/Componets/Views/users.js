@@ -1,11 +1,88 @@
-import { Button, Card, Container, Modal, Select, Stack, TextInput, Title } from "@mantine/core";
-import { useState } from "react";
+import { Alert, Button, Card, Container, Modal, Select, Stack, TextInput, Title } from "@mantine/core";
+import { createRef, useRef, useState } from "react";
 import TableView from "../CRM_table";
-import {IconPlus, IconDeviceFloppy} from "@tabler/icons"
+import {IconPlus, IconDeviceFloppy,IconX} from "@tabler/icons"
+import { useForm } from "@mantine/form";
+import Server from "../../Utilis/Server";
 
 function UsersView() {
     const [Open, SetOpen] = useState(false)
-    const [ModOpen, SetModOpen] = useState(false)
+    const [AddNot, SetAddNot] = useState(" ")
+    // const [AddNot, SetAddNot] = useState(" ")
+    const [ModOpen, SetModOpen] = useState(null)
+    let refreshTab = useRef(null);
+
+    const UserAddForm = useForm({
+        initialValues: {
+            Login: "",
+            Email: "",
+            Password: "",
+            Rank: 1
+        }
+
+    })
+
+    const UserEditForm = useForm({
+        initialValues: {
+            Login: "",
+            Email: "",
+            Password: "",
+            Rank: 1
+        }
+    })
+
+    const AddUserFun = (val) => {
+        Server.ApiInstance()
+            .post(
+                "/api/users/add.php",
+                {...val}
+            )
+            .then(
+                resp => {
+                    if (resp.data.CODE == "NO") SetAddNot("Wystąpił bład spróbuj ponwonie!")
+                    else {
+                        SetAddNot(' ')
+                        SetOpen(false)
+                        UserAddForm.reset()
+                        // refreshTab()
+                        refreshTab.current.refresh()
+                        // console.log(refreshTab.current.refresh)
+                    }
+                }
+            )
+            .catch(
+                err => {
+                    SetAddNot("Wystąpił bład spróbuj ponwonie!")
+                }
+            )
+    }
+
+    const SaveEditUser = (val) => {
+        if (val.Password !== undefined && val.Password.replaceAll(" ", "") == "") delete val["Password"]
+        Server.ApiInstance()
+            .post(
+                "/api/users/edit.php",
+                {ID: ModOpen.ID,...val}
+            )
+            .then(
+                resp => {
+                    if (resp.data.CODE == "NO") SetAddNot("Wystąpił bład spróbuj ponwonie!")
+                    else {
+                        SetAddNot(' ')
+                        SetModOpen(null)
+                        UserEditForm.reset()
+                        // refreshTab()
+                        refreshTab.current.refresh()
+                        // console.log(refreshTab.current.refresh)
+                    }
+                }
+            )
+            .catch(
+                err => {
+                    SetAddNot("Wystąpił bład spróbuj ponwonie!")
+                }
+            )
+    }
 
     return (
         <Stack
@@ -19,13 +96,23 @@ function UsersView() {
                     onClose={() => SetOpen(false)}
                     title={"Dodaj nowego użytkownika"}>
                     <Container fluid>
-                        <form>
+                        {
+                            AddNot != " " && <Alert sx={{marginBottom: "20px"}} onClose={() => SetAddNot(" ")} icon={<IconX size={18} />} color="red">
+                            {
+                                AddNot
+                            }
+                            </Alert>
+                        }
+                        <form
+                            onSubmit={UserAddForm.onSubmit((values) => AddUserFun(values))}
+                        >
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
                                 label="Login"
                                 placeholder="Login"
                                 variant="filled"
                                 radius="md"
+                                {...UserAddForm.getInputProps('Login')}
                             />
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
@@ -34,6 +121,7 @@ function UsersView() {
                                 placeholder="Hasło"
                                 variant="filled"
                                 radius="md"
+                                {...UserAddForm.getInputProps('Password')}
                             />
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
@@ -42,6 +130,7 @@ function UsersView() {
                                 placeholder="Adres email"
                                 variant="filled"
                                 radius="md"
+                                {...UserAddForm.getInputProps('Email')}
                             />
                             <Select
                                 label="Ranga"
@@ -49,9 +138,10 @@ function UsersView() {
                                 variant="filled"
                                 radius="md"
                                 data={[
-                                    { value: 0, label: 'Użytkownik' },
-                                    { value: 1, label: 'Administrator' },
+                                    { value: 1, label: 'Użytkownik' },
+                                    { value: 2, label: 'Administrator' },
                                 ]}
+                                {...UserAddForm.getInputProps('Rank')}
                             />
                             <Button 
                                 rightIcon={<IconPlus/>}
@@ -70,17 +160,27 @@ function UsersView() {
                     </Container>
                 </Modal>
                 <Modal
-                    opened={ModOpen}
-                    onClose={() => SetModOpen(false)}
+                    opened={ModOpen !== null}
+                    onClose={() => SetModOpen(null)}
                     title={"Edycja użytkownika"}>
                     <Container fluid>
-                        <form>
+                        {
+                            AddNot != " " && <Alert sx={{marginBottom: "20px"}} onClose={() => SetAddNot(" ")} icon={<IconX size={18} />} color="red">
+                            {
+                                AddNot
+                            }
+                            </Alert>
+                        }
+                        <form
+                            onSubmit={UserEditForm.onSubmit((values) => SaveEditUser(values))}
+                        >
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
                                 label="Login"
                                 placeholder="Login"
                                 variant="filled"
                                 radius="md"
+                                {...UserEditForm.getInputProps('Login')}
                             />
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
@@ -89,6 +189,7 @@ function UsersView() {
                                 placeholder="Hasło"
                                 variant="filled"
                                 radius="md"
+                                {...UserEditForm.getInputProps('Password')}
                             />
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
@@ -97,6 +198,7 @@ function UsersView() {
                                 placeholder="Adres email"
                                 variant="filled"
                                 radius="md"
+                                {...UserEditForm.getInputProps('Email')}
                             />
                             <Select
                                 label="Ranga"
@@ -104,10 +206,23 @@ function UsersView() {
                                 variant="filled"
                                 radius="md"
                                 data={[
-                                    { value: 0, label: 'Użytkownik' },
-                                    { value: 1, label: 'Administrator' },
+                                    { value: 1, label: 'Użytkownik' },
+                                    { value: 2, label: 'Administrator' },
                                 ]}
+                                {...UserEditForm.getInputProps('Rank')}
                             />
+                            <Button 
+                                variant="subtle"
+                                sx={{
+                                    color: "#2D5BFF",
+                                    float: "left",
+                                    marginTop: "30px",
+                                    // backgroundColor: "rgba(0, 45, 208, .1)",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(0, 45, 208, .25)"
+                                    },
+                                }}
+                            >Usuń</Button>
                             <Button 
                                 rightIcon={<IconDeviceFloppy/>}
                                 type="submit"
@@ -141,6 +256,7 @@ function UsersView() {
                         </Button>
                     </Card.Section>
                     <TableView
+                        ref={refreshTab}
                         headers={
                             [
                                 "ID",
@@ -172,7 +288,15 @@ function UsersView() {
                         }
 
                         render={
-                            (data) => <tr onClick={() => SetModOpen(true)} className="EventsTabRow">
+                            (data) => <tr onClick={() => {
+                                SetModOpen(data)
+                                UserEditForm.setValues({
+                                    Login: data.tittle,
+                                    Email: data.email,
+                                    Password: "",
+                                    Rank: parseInt(data.Type) 
+                                })
+                            }} className="EventsTabRow">
                                 <td>
                                     <a>
                                         {

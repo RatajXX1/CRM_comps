@@ -20,14 +20,14 @@ function checkStructure() {
         $data['Login'] = filter_var($data['Login'], FILTER_SANITIZE_STRING);
         // $data['Password'] = filter_var($data['Password'], FILTER_SANITIZE_STRING);
         $data['Email'] = filter_var($data['Email'], FILTER_SANITIZE_EMAIL);
-        if (is_numeric($data['Rank']) && is_numeric($data['ID']) && !empty($data['Login']) && !empty($data['Password']))  {
+        if (is_numeric($data['Rank']) && is_numeric($data['ID']) && !empty($data['Login']))  {
             return true;
         } else return false;
     } else return false;
 }
 
 $sql_cursor = sql_con();
-if (enter_to_view_by_rank($sql_cursor, 3) && checkStructure()) {
+if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
 
     if (array_key_exists("Password", $data)) {
         $data['Password'] = filter_var($data['Password'], FILTER_SANITIZE_STRING);

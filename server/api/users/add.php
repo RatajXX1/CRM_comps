@@ -39,7 +39,7 @@ function checkStructure() {
 }
 
 $sql_cursor = sql_con();
-if (enter_to_view_by_rank($sql_cursor, 3) && checkStructure()) {
+if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
     global $smtp_host, $smtp_port, $smtp_login, $smtp_password;
     // $pasword = randomPassword();
     $hashed = hash('SHA256', hash('SHA256', $data['Password']));

@@ -17,9 +17,10 @@ class TableView extends React.Component {
             Page: 0,
             PageLimit: 25,
             canLoad: true,
+            StartPage: 1
         }
         this.Area = React.createRef()
-
+        this.refresh = this.RefreshData.bind(this)
         this.style = createStyles(
             (theme) => {
                 return {
@@ -59,10 +60,12 @@ class TableView extends React.Component {
         }
         if (this.props.StartPage !== undefined) {
             this.state.Page = this.props.StartPage
+            this.state.StartPage = this.props.StartPage
         }
         if (this.props.PageLimit !== undefined) {
             this.state.PageLimit = this.props.PageLimit
         }
+
         if (this.state.canLoad) this.DownloadData()
         this.forceUpdate()
     }
@@ -74,7 +77,7 @@ class TableView extends React.Component {
                 .then(
                     resp => {
                         let dat = this.props.ResponseFunc(resp.data)
-
+                        console.log(Object.entries(dat).length)
                         if (Object.entries(dat).length >= this.state.PageLimit) this.state.canLoad = true
                         else this.state.canLoad = false
 
@@ -87,8 +90,25 @@ class TableView extends React.Component {
         }
     }
 
+    RefreshData() {
+        this.setState({
+            Headers:this.state.Headers,
+            Sizes: this.state.Sizes,
+            Data:[],
+            SortBy: null,
+            reversedSort: false,
+            Page: 1,
+            PageLimit: this.state.PageLimit,
+            canLoad: false,
+        })
+        this.Area.current.scrollTop = 0
+        setTimeout(this.DownloadData.bind(this), 500)
+        // this.forceUpdate()
+    }
+
     scrollChange(x) {
-        if (x.x >= (this.Area.current.scrollTopMax - 100) && this.state.canLoad) {
+        if (x.y >= (this.Area.current.scrollTopMax - 100) && this.state.canLoad) {
+            
             this.state.canLoad = false
             this.state.Page += 1
             this.DownloadData()
