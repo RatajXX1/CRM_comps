@@ -1,13 +1,15 @@
 import { Alert, Button, Container, Group, Notification, Paper, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {IconChevronRight,IconKey,IconPassword} from "@tabler/icons"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Server from "../../Utilis/Server";
 import { IconX } from '@tabler/icons';
+import { Navigate, useNavigate } from "react-router-dom";
 
 function LoginView() {
     const [Notfi, SetNotfi] = useState(false)
     const [NotfiText, SetNotfiText] = useState("")
+    const navi = useNavigate()
 
     const LoginForm = useForm({
         initialValues: {
@@ -44,6 +46,18 @@ function LoginView() {
         )
 
     }
+
+    useEffect(
+        () => {
+            Server.ApiInstance()
+            .get("/api/auth/authorize.php")
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") navi("/dashboard")
+                }
+            )
+        }
+    )
 
     return (
         <div
