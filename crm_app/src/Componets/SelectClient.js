@@ -21,9 +21,30 @@ class SelectClient extends React.Component {
         if (this.state.CanLoad) this.DownloadData()
     }
 
+    refreshData() {
+        this.setState({
+            Data: [],
+            SearchQuery: this.state.SearchQuery,
+            CanLoad: true,
+            Page: 1,
+        })
+        this.Area.current.scrollTop = 0
+        setTimeout(this.DownloadData.bind(this), 500)
+    }
+
     async DownloadData() {
-        await Server.ApiInstance()
+        if (this.state.SearchQuery.replaceAll(" ", "") == "") await Server.ApiInstance()
             .get("/api/clients/index.php?page=" + this.state.Page.toString())
+            .then(
+                resp => {
+                    if (Object.entries(resp.data.Users).length >= 25) this.state.CanLoad = true
+                    else this.state.CanLoad = false
+                    this.state.Data = this.state.Data.concat(resp.data.Users)
+                    this.forceUpdate()
+                }
+            )
+        else await Server.ApiInstance()
+            .get(`/api/clients/search.php?query=${encodeURIComponent(this.state.SearchQuery)}&page=` + this.state.Page.toString())
             .then(
                 resp => {
                     if (Object.entries(resp.data.Users).length >= 25) this.state.CanLoad = true
@@ -63,6 +84,7 @@ class SelectClient extends React.Component {
                         onChange={
                             (e) => {
                                 this.state.SearchQuery = e.target.value
+                                this.refreshData()
                             }
                         }
                     />
@@ -78,7 +100,7 @@ class SelectClient extends React.Component {
                                 (
                                     () => {
                                         const tab = []
-                                        this.state.Data.forEach(element => {
+                                        this.state.Data.forEach((element, index) => {
                                             tab.push(
                                                 <Button
                                                     sx={{
@@ -94,6 +116,11 @@ class SelectClient extends React.Component {
                                                         }
                                                     }}
                                                     leftIcon={<IconUserCircle/>}
+                                                    onClick={
+                                                        () => {
+                                                            if (this.props.onSelect !== undefined) this.props.onSelect(element)
+                                                        }
+                                                    }
                                                 >
                                                     {element.Namop}
                                                 </Button>
