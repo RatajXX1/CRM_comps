@@ -31,9 +31,9 @@ if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
     // $pasword = randomPassword();
     
     $stmt = $sql_cursor->prepare(
-        "UPDATE clients SET Name = ?, DescName = ?, Contacs = ?; WHERE ID = ?"
+        "UPDATE clients SET Name = ?, DescName = ?, Contacs = ? WHERE ID = ?"
     );
-    $stmt->bind_param("ssbi", $data['Name'],$data['DescName'],$data['Contacs'],$data['ID']);
+    $stmt->bind_param("sssi", $data['Name'],$data['DescName'],$data['Contacs'],$data['ID']);
     $stmt->execute();
     $stmt->close();
 
