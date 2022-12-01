@@ -77,7 +77,7 @@ class TableView extends React.Component {
                 .then(
                     resp => {
                         let dat = this.props.ResponseFunc(resp.data)
-                        console.log(Object.entries(dat).length)
+                        // console.log(Object.entries(dat).length)
                         if (Object.entries(dat).length >= this.state.PageLimit) this.state.canLoad = true
                         else this.state.canLoad = false
 

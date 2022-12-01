@@ -1,27 +1,29 @@
-import { Button, Card, Container, Group, Highlight, Modal, ScrollArea, Stack, TextInput, Title } from "@mantine/core";
+import { Alert, Button, Card, Container, Group, Highlight, Modal, ScrollArea, Stack, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { RichTextEditor } from "@mantine/tiptap";
 import Link from "@tiptap/extension-link";
 import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import {IconArrowLeft, IconChevronRight,IconMan,IconSearch,IconUserCircle} from "@tabler/icons"
+import {IconArrowLeft, IconChevronRight,IconMan,IconSearch,IconUserCircle,IconX} from "@tabler/icons"
 import { DatePicker } from '@mantine/dates';
 import 'dayjs/locale/pl';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { useNavigate } from "react-router-dom";
+import SelectClient from "../SelectClient";
+import Server from "../../Utilis/Server";
 
 
 function AddEventsView() {
     const [Open, setOpened] = useState(false)
+    const [Not, SetNot] = useState(" ")
     const navi = useNavigate()
 
     const Addfrom = useForm({
         initialValues: {
-            tittle: "",
-            desc: "",
-
+            title: "",
+            ETA: "",
         }
     })
 
@@ -36,6 +38,26 @@ function AddEventsView() {
         ],
         content: ""
     })
+
+    const AddEvents = (values) => {
+        // console.log(values, Desceditor.getHTML())
+        Server.ApiInstance()
+            .post("/api/events/add.php", {description: Desceditor.getHTML(),...values})
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") {
+                        navi(-1)
+                    } else {
+                        SetNot("Wystapił bład, spróbuj ponownie pozniej!")
+                    }
+                }
+            )
+            .catch(
+                () => {
+                    SetNot("Wystapił bład, spróbuj ponownie pozniej!")
+                }
+            )
+    }
 
     return (
         <Stack
@@ -58,6 +80,13 @@ function AddEventsView() {
                     Powrót
                 </Button>
             </Group>
+            {
+                Not != " " && <Alert sx={{marginBottom: "20px"}} onClose={() => SetNot(" ")} icon={<IconX size={18} />} color="red">
+                {
+                    Not
+                }
+                </Alert>
+            }
             <Card sx={{height: "80vh"}} shadow="sm" p="lg" radius="md" withBorder>
                 <Container fluid sx={{height: "100%"}}>
                     <Title 
@@ -94,7 +123,12 @@ function AddEventsView() {
                             Wybierz Klienta
                         </Button>
                     </Title>
-                    <Modal
+                    <SelectClient
+                        opened={Open}
+                        onClose={() => setOpened(false)}
+                        title={"Wybierz klienta"}
+                    />
+                    {/* <Modal
                         opened={Open}
                         onClose={() => setOpened(false)}
                         title={"Wybierz klienta"}
@@ -148,13 +182,14 @@ function AddEventsView() {
                                 </Stack>
                             </ScrollArea>
                         </Container>
-                    </Modal>
+                    </Modal> */}
                     <form 
                         style={{
                             position: "relative",
                             height: "100%",
                             marginTop: "10px"
                         }}
+                        onSubmit={Addfrom.onSubmit((values) => AddEvents(values))}
                     >
                         <TextInput
                             sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
@@ -162,7 +197,7 @@ function AddEventsView() {
                             placeholder="Tytuł"
                             variant="filled"
                             radius="md"
-                            {...Addfrom.getInputProps('tittle')}
+                            {...Addfrom.getInputProps('title')}
                         />
                         
                         <Title order={6} sx={{fontWeight:"500"}}>Opis</Title>
@@ -242,6 +277,7 @@ function AddEventsView() {
                             inputFormat={"MM/DD/YYYY"}
                             labelFormat={"MM/DD/YYYY"}
                             placeholder="MM/DD/YYYY" 
+                            {...Addfrom.getInputProps('ETA')}
                             label="Przypuszczalna data zakończenia (opcjonale)" 
                             dayStyle={
                                 (date) => {
