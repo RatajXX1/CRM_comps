@@ -1,6 +1,7 @@
 import { Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
 import Chart from "react-apexcharts";
 import "../../style/dashboard.scss"
+import TableView from "../CRM_table";
 
 const ChartCard = () => {
     return (
@@ -141,7 +142,74 @@ const ChartNews = () => {
                         Najnowsze wydarzenia
                     </Title>
                 </Card.Section>
-                <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
+                <TableView
+                    headers={
+                        [
+                            "Status",
+                            "Klient",
+                            "Tytuł",
+                            "Data rozpoczecia"
+                        ]
+                    }
+
+                    sizes={
+                        [
+                            {width: "10%"},
+                            {width: "30%"},
+                            {width: "auto"},
+                            {width: "15%", textAlign: "right"},
+                        ]
+                    }
+
+                    PaginationFunc={
+                        (page) => `/api/events/latest.php?page=${page}`
+                    }
+
+                    ResponseFunc={
+                        resp => resp.Users
+                    }
+
+                    render={
+                        data => <tr className={"EventsTabRow"}>
+                                    <td>
+                                        <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
+                                        {
+                                            (
+                                                () => {
+                                                    if (data.Type == 1) return "W trakcie"
+                                                    else if (data.Type == 2) return "Opóznione"
+                                                    else if (data.Type == 3) return "Zakończne"
+                                                }
+                                            )() 
+                                        }
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            {
+                                                data.DescName
+                                            }
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            {
+                                                data.tittle
+                                            }
+                                        </a>
+                                    </td>
+                                    <td style={{textAlign: "right"}}>
+                                        <a>
+                                            {
+                                                data.dates
+                                            }
+                                        </a>
+                                    </td>
+                                </tr>
+                    }
+
+                />
+                {/* <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
                     <colgroup>
                         <col width={"10%"}></col>
                         <col style={{width: "30%"}}></col>
@@ -208,7 +276,7 @@ const ChartNews = () => {
                             )()
                         }
                     </tbody>
-                </Table>
+                </Table> */}
             </Container>
         </Card>
     )

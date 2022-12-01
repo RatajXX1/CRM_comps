@@ -210,11 +210,17 @@ class TableView extends React.Component {
                             (
                                 () => {
                                     const tab = []
-                                    this.state.Data.forEach(
-                                        e => {
-                                            if (this.props.render !== undefined) tab.push(this.props.render(e))
-                                        }
-                                    )
+                                    if (this.state.Data.length > 0) 
+                                        this.state.Data.forEach(
+                                            e => {
+                                                if (this.props.render !== undefined) tab.push(this.props.render(e))
+                                            }
+                                        )
+                                    else tab.push(<tr>
+                                        <th colSpan={this.state.Headers.length}>
+                                            <h2 style={{textAlign: "center"}}>Brak danych</h2>
+                                        </th>
+                                    </tr>)
                                     return tab
                                 }
                             )()
