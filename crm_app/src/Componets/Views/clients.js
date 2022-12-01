@@ -8,6 +8,8 @@ import TableView from "../CRM_table";
 function ClientsView() {
     const navi = useNavigate()
 
+
+
     return (
         <Stack
             sx={{
@@ -41,15 +43,12 @@ function ClientsView() {
                             ]
                         }
 
-                        data={
-                            [
-                                {
-                                    ID: 1,
-                                    Namop: "dMDR",
-                                    tittle: "MDR",
-                                    dates: "20202-10-10 10:00:00"
-                                }                                                                                   
-                            ]
+                        PaginationFunc={
+                            (page) => `/api/clients/index.php?page=${page}`
+                        }
+
+                        ResponseFunc={
+                            resp => resp.Users
                         }
                         
                         sizes={
@@ -62,7 +61,14 @@ function ClientsView() {
                         }
 
                         render={
-                            (data) => <tr onClick={() => navi("/show/client")} className="EventsTabRow">
+                            (data) => <tr 
+                                    onClick={
+                                        () => {
+                                            window.localStorage.setItem("ClientData", JSON.stringify(data))
+                                            navi("/show/client")
+                                        }} 
+                                    className="EventsTabRow"
+                                >
                                 <td>
                                     <a>
                                         {

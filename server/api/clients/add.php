@@ -30,9 +30,10 @@ if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
     // $pasword = randomPassword();
     
     $stmt = $sql_cursor->prepare(
-        "INSERT INTO clients ( Name, DescName, Contacs) values (?, ?, ?)"
+        "INSERT INTO clients ( Name, DescName, Contacs) values (?, ?, ?);"
     );
-    $stmt->bind_param("ssb", $data['Name'],$data['DescName'],$data['Contacs']);
+    $stmt->bind_param("sss", $data['Name'],$data['DescName'],$data['Contacs']);
+    // $stmt->execute();
     $stmt->execute();
     $stmt->close();
 

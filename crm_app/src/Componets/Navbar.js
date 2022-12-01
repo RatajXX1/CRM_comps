@@ -119,12 +119,12 @@ function NavbarView(props) {
                 {
                     NavButton("Klienci", "/clients", <IconAddressBook/>)
                 }
-                {
+                {/* {
                    props.UserData.Rank_type > 1 && NavHeader("Zarządzaj")
                 }
                 {
                     props.UserData.Rank_type > 1 && NavButton("Użytkownicy", "/users", <IconUsers/>)
-                }
+                } */}
 
             </Navbar.Section>
         </Navbar>
