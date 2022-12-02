@@ -1,10 +1,33 @@
 import { Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
+import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
 import "../../style/dashboard.scss"
+import Server from "../../Utilis/Server";
 import TableView from "../CRM_table";
 
-const ChartCard = () => {
+const MonthNamesByLenght = (a) => {
+    let tab = []
+    let Names = [
+        "Styczeń",
+        "Luty",
+        "Marzec",
+        "Kwiecień",
+        "Maj",
+        "Czerwiec",
+        "Lipiec",
+        "Śierpień",
+        "Wrzesień",
+        "Październik",
+        "Listpad",
+        "Grudzień",
+    ]
+    for(let i = 11; i >= 0 + (12 - a); i--) tab.push(Names[i])
+    return tab.reverse()
+}
+
+const ChartCard = (Counts, Stats) => {
+
     return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
             <Container fluid>
@@ -24,7 +47,7 @@ const ChartCard = () => {
                         }}
                     >   
                         <Title sx={{color: "#181818" , fontWeight: "400", marginTop: "20px"}} order={4}>Ilość</Title>
-                        <Title sx={{color: "#181818", margin: "10px 10px 10px 0"}} order={3}>10000</Title>
+                        <Title sx={{color: "#181818", margin: "10px 10px 10px 0"}} order={3}>{Counts.FullCount}</Title>
                         <Title sx={{color: "#181818", fontWeight: "400", marginBottom: "-5px"}} order={4}>Status</Title>
                         <Chart
                             options={{
@@ -50,7 +73,7 @@ const ChartCard = () => {
                             }}
                             
                             series={[
-                                44, 55, 17
+                                Counts.End, Counts.Late, Counts.Work
                             ]}
                             type="donut"
                             width="100%"
@@ -87,7 +110,7 @@ const ChartCard = () => {
                                     crosshairs: {
                                         show: false
                                     },
-                                    categories: ["21-10-2022","22-10-2022","23-10-2022", "24-10-2022", "25-10-2022"]
+                                    categories: MonthNamesByLenght(Stats.length)
                                 },
                                 fill: {
                                     colors: ['#FFFFFF']
@@ -119,8 +142,8 @@ const ChartCard = () => {
                             }}
                             series={[
                                 {
-                                name: "series-1",
-                                data: [30, 40, 45, 50, 76]
+                                name: "",
+                                data: Stats
                                 }
                             ]}
                             type="line"
@@ -211,80 +234,36 @@ const ChartNews = () => {
                     }
 
                 />
-                {/* <Table sx={{marginTop: "20px", tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px"}} >
-                    <colgroup>
-                        <col width={"10%"}></col>
-                        <col style={{width: "30%"}}></col>
-                        <col style={{width: "auto"}}></col>
-                        <col style={{textAlign: "right"}} width={"15%"}></col>
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            <th>
-                                Status
-                            </th>
-                            <th>
-                                Klient
-                            </th>
-                            <th>
-                                Tytuł
-                            </th>
-                            <th style={{textAlign: "right"}}>
-                                Data rozpoczecia
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            (
-                                () => {
-                                    const tab = []
-                                    for(let i = 0; i < 10; i++) {
-                                        tab.push(
-                                            <tr className={"EventsTabRow"}>
-                                                <td>
-                                                    <a className={(() => {if (i%2 == 0) return "EventsTabRow_state_work"; else if (i%2  == 1) return "EventsTabRow_state_end"; else if (i%2  == 2) return "EventsTabRow_state_succes"})()}>
-                                                    {
-                                                        (
-                                                            () => {
-                                                                if (i%2 == 0) return "W trakcie"
-                                                                else if (i%2 == 1) return "Opóznione"
-                                                                else if (i%2 == 2) return "Zakończne"
-                                                            }
-                                                        )() 
-                                                    }
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a>
-                                                        MDR
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a>
-                                                        Komputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsułKomputer sie zepsuł
-                                                    </a>
-                                                </td>
-                                                <td style={{textAlign: "right"}}>
-                                                    <a>
-                                                        2020-11-25 10:00:00
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        )
-                                    }
-                                    return tab
-                                }
-                            )()
-                        }
-                    </tbody>
-                </Table> */}
             </Container>
         </Card>
     )
 }
 
 function DashboardView() {
+    const [Load, SetLoad] = useState(false)
+    const [Data, SetData] = useState({})
+    const [Stats, SetStats] = useState({})
+
+    useEffect(() => {
+        if (!Load) 
+            Server.ApiInstance()
+                .get("/api/dash/index.php")
+                .then(
+                    resp => {
+                        if (resp.data.CODE == "OK") {
+                            SetData(resp.data.Count)
+                            SetStats(resp.data.States)
+                            SetLoad(true)
+                        }
+
+                    }
+                )
+
+        console.log(Stats)
+    })
+
+
+
     return (
         <Stack
             sx={{
@@ -292,7 +271,7 @@ function DashboardView() {
             }}
         >
             {
-                ChartCard()
+                ChartCard(Data,Stats)
             }
             {
                 ChartNews()

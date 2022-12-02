@@ -30,7 +30,7 @@ if (enter_to_view_by_rank($sql_cursor, 1)) {
     $years = array();
     $resoult = $sql_cursor->query("SELECT COUNT(*) as Stat FROM events GROUP BY EXTRACT(YEAR_MONTH FROM created) ORDER BY EXTRACT(YEAR_MONTH FROM created) DESC LIMIT 12;");
     while($row = $resoult->fetch_assoc()) {
-        array_push($years, $row["Stat"]);
+        array_push($years, intval($row["Stat"]));
     }
     
     echo json_encode(array(
