@@ -13,7 +13,7 @@ $page = $_GET['page'] ?? 0;
 $sql_cursor = sql_con();
 if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($page)) {
     $page = 25 * ($page > 0 ? $page - 1 : $page);
-    $resoult = $sql_cursor->query("SELECT events.ID,events.State,clients.DescName,events.tittle,events.created,events.ETA FROM events JOIN clients ON clients.ID = events.ClientID order by events.ID asc limit 25 offset $page;");
+    $resoult = $sql_cursor->query("SELECT events.ID,events.State,clients.DescName,events.title,events.created,events.ETA FROM events JOIN clients ON clients.ID = events.ClientID order by events.ID asc limit 25 offset $page;");
     if ($resoult->num_rows > 0) {
         $users = array();
         while ($row = $resoult->fetch_assoc()) {
@@ -21,7 +21,7 @@ if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($page)) {
                 'ID' => $row['ID'],
                 'dates' => $row['created'],
                 'eta' => $row['ETA'],
-                'tittle' => $row['tittle'],
+                'tittle' => $row['title'],
                 'DescName' => $row['DescName'],
                 'Type' => $row['State'],
             );

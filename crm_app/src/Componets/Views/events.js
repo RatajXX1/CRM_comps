@@ -207,27 +207,12 @@ function EventsView() {
                             ]
                         }
 
-                        data={
-                            [
-                                {
-                                    Name:1,
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },            
-                                {
-                                    Name:2,
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },  
-                                {
-                                    Name:0,
-                                    Client: "dasa",
-                                    tittle: "dasa",
-                                    dates: "20202-10-10 10:00:00"
-                                },                                                                                    
-                            ]
+                        PaginationFunc={
+                            (page) => `/api/events/index.php?page=${page}`
+                        }
+    
+                        ResponseFunc={
+                            resp => resp.Users
                         }
                         
                         sizes={
@@ -243,22 +228,22 @@ function EventsView() {
                         render={
                             (data) => <tr className="EventsTabRow" onClick={() => history("/show/events")}>
                                 <td>
-                                    <a className={(() => {if (data.Name == 0) return "EventsTabRow_state_work"; else if (data.Name == 1) return "EventsTabRow_state_end"; else if (data.Name == 2) return "EventsTabRow_state_succes"})()}>
+                                    <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
                                         {
                                             (
                                                 () => {
-                                                    if (data.Name == 0) return "W trakcie"
-                                                    else if (data.Name == 1) return "Opóznione"
-                                                    else if (data.Name == 2) return "Zakończne"
+                                                    if (data.Type == 1) return "W trakcie"
+                                                    else if (data.Type == 2) return "Opóznione"
+                                                    else if (data.Type == 3) return "Zakończne"
                                                 }
                                             )() 
                                         }
-                                    </a>
+                                        </a>
                                 </td>
                                 <td>
                                     <a>
                                         {
-                                            data.Client
+                                            data.DescName
                                         }
                                     </a>
                                 </td>
@@ -278,7 +263,10 @@ function EventsView() {
                                 </td>
                                 <td>
                                     <a style={{textAlign: "right"}}>
-                                        --
+                                        {
+
+                                            data.eta == null ? "--" : data.eta
+                                        }
                                     </a>
                                 </td>
                             </tr>
