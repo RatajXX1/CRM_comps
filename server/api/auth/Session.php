@@ -58,7 +58,7 @@ function CreateSession($sql_cursor, $User_ID, $Auto_login = false) {
         TIMESTAMPADD(DAY, 1 ,CURRENT_TIMESTAMP) 
     );");
     if (PHP_VERSION_ID < 70300) {
-        setcookie('SES_ID', $ses_id, strtotime($Auto_login ? '+ 1 month' : '+ 1 day', strtotime(date("Y-m-d"))),  '/; samesite=None', '', false, false);
+        setcookie('SES_ID', $ses_id, strtotime($Auto_login ? '+ 1 month' : '+ 1 day', strtotime(date("Y-m-d"))),  '/', '', false, false);
     } else {
         setcookie('SES_ID', $ses_id, [
             'expires' => strtotime($Auto_login ? '+ 1 month' : '+ 1 day', strtotime(date("Y-m-d"))),
@@ -66,7 +66,7 @@ function CreateSession($sql_cursor, $User_ID, $Auto_login = false) {
             'domain' => '',
             'secure' => false,
             'httponly' => false,
-            'samesite' => 'None',
+            // 'samesite' => 'None',
         ]);
     }
     return true;

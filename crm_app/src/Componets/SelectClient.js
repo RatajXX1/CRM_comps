@@ -119,6 +119,7 @@ class SelectClient extends React.Component {
                                                     onClick={
                                                         () => {
                                                             if (this.props.onSelect !== undefined) this.props.onSelect(element)
+                                                            if (this.props.onClose !== undefined) this.props.onClose()
                                                         }
                                                     }
                                                 >

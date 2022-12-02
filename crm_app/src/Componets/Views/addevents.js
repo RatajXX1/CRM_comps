@@ -18,6 +18,8 @@ import Server from "../../Utilis/Server";
 function AddEventsView() {
     const [Open, setOpened] = useState(false)
     const [Not, SetNot] = useState(" ")
+    const [ClientName, SetClientName] = useState("")
+    const [ClientID, SetClientID] = useState(0)
     const navi = useNavigate()
 
     const Addfrom = useForm({
@@ -41,8 +43,14 @@ function AddEventsView() {
 
     const AddEvents = (values) => {
         // console.log(values, Desceditor.getHTML())
+        
+        if (values.ETA != "") {
+            values.ETA = values.ETA.toISOString().split("T")[0];
+        } else {
+            delete values["ETA"]
+        }
         Server.ApiInstance()
-            .post("/api/events/add.php", {description: Desceditor.getHTML(),...values})
+            .post("/api/events/add.php", {ClientID: ClientID,description: Desceditor.getHTML(),...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -120,13 +128,21 @@ function AddEventsView() {
                             }}
                             variant="subtle"
                         >
-                            Wybierz Klienta
+                            {
+                                (ClientName === "" || ClientID === 0) ? "Wybierz Klienta" : ClientName
+                            }
                         </Button>
                     </Title>
                     <SelectClient
                         opened={Open}
                         onClose={() => setOpened(false)}
                         title={"Wybierz klienta"}
+                        onSelect={
+                            (data) => {
+                                SetClientID(parseInt(data.ID))
+                                SetClientName(data.Namop)
+                            }                            
+                        }
                     />
                     {/* <Modal
                         opened={Open}

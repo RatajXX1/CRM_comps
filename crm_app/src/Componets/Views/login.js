@@ -8,6 +8,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 function LoginView() {
     const [Notfi, SetNotfi] = useState(false)
+    const [Checked, SetChecked] = useState(false)
     const [NotfiText, SetNotfiText] = useState("")
     const navi = useNavigate()
 
@@ -15,7 +16,7 @@ function LoginView() {
         initialValues: {
             login: "",
             password: "",
-            Auto_login: false
+            Auto_login: true
         }
     })
 
@@ -49,11 +50,12 @@ function LoginView() {
 
     useEffect(
         () => {
-            Server.ApiInstance()
+            if (!Checked)Server.ApiInstance()
             .get("/api/auth/authorize.php")
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") navi("/dashboard")
+                    SetChecked(true)
                 }
             )
         }

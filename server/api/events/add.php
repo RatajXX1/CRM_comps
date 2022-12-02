@@ -30,17 +30,17 @@ if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
     // $pasword = randomPassword();
     if (array_key_exists('ETA', $data)) {
         $stmt = $sql_cursor->prepare(
-            "INSERT INTO events ( State, ClientID, title, description, ETA) values (1, ?, ?, ?, ?);"
+            "INSERT INTO events (ClientID, title, description, ETA) values (?, ?, ?, ?);"
         );
-        $stmt->bind_param("ssss", $data['ClientID'],$data['title'],$data['description'],$data['ETA']);
+        $stmt->bind_param("isss",$data['ClientID'],$data['title'],$data['description'],$data['ETA']);
         // $stmt->execute();
         $stmt->execute();
-        $stmt->close();
+        $stmt->close(); 
     } else {
         $stmt = $sql_cursor->prepare(
             "INSERT INTO events ( State, ClientID, title, description) values (1, ?, ?, ?);"
         );
-        $stmt->bind_param("sss", $data['ClientID'],$data['title'],$data['description']);
+        $stmt->bind_param("iss", $data['ClientID'],$data['title'],$data['description']);
         // $stmt->execute();
         $stmt->execute();
         $stmt->close();
