@@ -68,6 +68,29 @@ function ShovEventsView() {
         }
     })
 
+    const RefreshData = () => {
+        Server.ApiInstance()
+            .get("/api/events/event.php?ID=" + params.get("ID"))
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") {
+                        SetData(resp.data.Event)
+                        SetStates(resp.data.States)
+                        Data.Contacs = JSON.parse(resp.data.Event.Contacs)
+                        if (typeof Data.Contacs == "string" && Data.Contacs !== undefined) Data.Contacs = JSON.parse(Data.Contacs)
+                    } 
+                    // else navi(-1)
+                }
+            )
+            .catch(
+                err => {
+                    console.log(err)
+                    // navi(-1)
+                    
+                }
+            )
+    }
+
     const AddNewComment = (values) => {
         Server.ApiInstance()
             .post("/api/events/addstate.php", {EventID: Data.ID, ...values})
@@ -77,6 +100,7 @@ function ShovEventsView() {
                         Addfrom.reset()
                         SetNot("")
                         setOpenEdit(false)
+                        RefreshData()
                     } else {
                         SetNot("Wystąpił błąd, spróbuj ponownie pozniej!")
                     }
