@@ -311,12 +311,12 @@ function ShovEventsView() {
                                 borderLeftColor: "rgba(0, 45, 208, .25)"
                             }
                         }}
-                        active={1}
+                        active={States.length}
                         bulletSize={24}
                         lineWidth={5}
                     >
 
-                        <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
+                        <Timeline.Item bullet={<IconGitBranch size={12} />} lineVariant={ States.length === 0 ? "dotted" : "solid"} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
                             {Data.ETA != null &&<Text color="dimmed" size="sm">Szacowana data zakończenia <span style={{color: "#2D5BFF"}}>2020-10-20</span></Text>}
                             {
                                 TimeWidget(Data.created)
@@ -327,25 +327,59 @@ function ShovEventsView() {
                             (
                                 () => {
                                     const tab = []
-                                    for(let i = 0; i < States.length; i++) 
-                                        if (i == 0)tab.push(
-                                            <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
-                                                <Text color="dimmed" size="sm">Szacowana data zakończenia <span style={{color: "#2D5BFF"}}>2020-10-20</span></Text>
-                                                <Text size="xs" mt={4}>2 godziny temu</Text>
-                                            </Timeline.Item>
-                                            )
-                                        else if (i < 3) tab.push(
-                                            <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}>Aktualizacja statusu - <span style={{color: "#2D5BFF"}}>Wizyta u klienta</span></Title>}>
-                                                <Text color="dimmed" size="sm">Naprawa # {i}</Text>
-                                                <Text size="xs" mt={4}>2 godziny temu</Text>
+                                    for(let i = 0; i < States.length; i++)  {
+                                        if (States[i].Type == 0) tab.push(
+                                            <Timeline.Item bullet={<IconGitBranch size={12} />} lineVariant={ i == States.length - 1 ? "dotted" : "solid"} title={<Title order={5}>Aktualizacja statusu - <span style={{color: "#2D5BFF"}}>{States[i].Title}</span></Title>}>
+                                                <Text color="dimmed" size="sm">{States[i].EComment}</Text>
+                                                {
+                                                    TimeWidget(States[i].Added)
+                                                }
                                             </Timeline.Item>
                                         ) 
                                         else tab.push(
-                                            <Timeline.Item bullet={<IconGitBranch size={12} />} lineVariant="dotted" title={<Title order={5}>Aktualizacja statusu - <span style={{color: "#2D5BFF"}}>Wizyta u klienta</span></Title>}>
-                                                <Text color="dimmed" size="sm">Naprawa # {i}</Text>
-                                                <Text size="xs" mt={4}>2 godziny temu</Text>
+                                            <Timeline.Item bullet={<IconGitBranch size={12} />} ineVariant={ i == States.length - 1 ? "dotted" : "solid"} title={<Title order={5}>Zakończenie - <span style={{color: "#2D5BFF"}}>{States[i].Title}</span></Title>}>
+                                                <Text color="dimmed" size="sm">{States[i].EComment}</Text>
+                                                {
+                                                    TimeWidget(States[i].Added)
+                                                }
                                             </Timeline.Item>
-                                            )
+                                        )
+                                    }
+                                    if (Data.State == 1 || (Data.State != 1 && Data.ETA == null) ) {
+                                        tab.push(
+                                            <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}><span style={{color: "#2D5BFF"}}>Oczekiwanie nowe zdarzenia</span></Title>}>
+                                                {/* <Text color="dimmed" size="sm">e</Text> */}
+                                                {/* <Text size="xs" mt={4}>20 sekund temu</Text> */}
+                                            </Timeline.Item>
+                                        )
+                                    } else if (Data.State == 2 && Data.ETA != null) {
+                                        tab.push(
+                                            <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}><span style={{color: "#2D5BFF"}}>Opoźnione zakończenie!</span></Title>}>
+                                                {/* <Text color="dimmed" size="sm">e</Text> */}
+                                                {/* <Text size="xs" mt={4}>20 sekund temu</Text> */}
+                                            </Timeline.Item>
+                                        )
+                                    }
+
+                                        // if (i == 0)tab.push(
+                                        //     <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
+                                        //         <Text color="dimmed" size="sm">Szacowana data zakończenia <span style={{color: "#2D5BFF"}}>2020-10-20</span></Text>
+                                        //         <Text size="xs" mt={4}>2 godziny temu</Text>
+                                        //     </Timeline.Item>
+                                        //     )
+                                        // else if (i < 3) tab.push(
+                                        //     <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}>Aktualizacja statusu - <span style={{color: "#2D5BFF"}}>Wizyta u klienta</span></Title>}>
+                                        //         <Text color="dimmed" size="sm">Naprawa # {i}</Text>
+                                        //         <Text size="xs" mt={4}>2 godziny temu</Text>
+                                        //     </Timeline.Item>
+                                        // ) 
+                                        // else tab.push(
+                                        //     <Timeline.Item bullet={<IconGitBranch size={12} />} lineVariant="dotted" title={<Title order={5}>Aktualizacja statusu - <span style={{color: "#2D5BFF"}}>Wizyta u klienta</span></Title>}>
+                                        //         <Text color="dimmed" size="sm">Naprawa # {i}</Text>
+                                        //         <Text size="xs" mt={4}>2 godziny temu</Text>
+                                        //     </Timeline.Item>
+                                        //     )
+
                                     return tab
                                 }
                             )()
