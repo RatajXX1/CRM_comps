@@ -112,6 +112,23 @@ function ShovEventsView() {
                 }
             )
     }
+
+    const RemoveEvent = () => {
+        Server.ApiInstance()
+            .post("/api/events/remove.php?ID="+Data.ID)
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") {
+                        navi(-1)
+                    }
+                }
+            )
+            .catch(
+                () => {
+                    
+                }
+            )
+    }
  
     if (params.get("ID") == undefined || params.get("ID") == null) navi(-1)
     
@@ -470,6 +487,7 @@ function ShovEventsView() {
                         }}
                     >
                         <Button
+                            onClick={() => RemoveEvent()}
                             variant="subtle"
                             sx={{
                                 color: "#2D5BFF",                                
