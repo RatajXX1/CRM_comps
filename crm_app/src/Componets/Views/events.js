@@ -226,7 +226,7 @@ function EventsView() {
                         }
 
                         render={
-                            (data) => <tr className="EventsTabRow" onClick={() => history("/show/events")}>
+                            (data) => <tr className="EventsTabRow" onClick={() => history("/show/events?ID=" + data.ID)}>
                                 <td>
                                     <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
                                         {

@@ -1,5 +1,6 @@
 import { Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
 import Chart from "react-apexcharts";
+import { useNavigate } from "react-router-dom";
 import "../../style/dashboard.scss"
 import TableView from "../CRM_table";
 
@@ -134,6 +135,7 @@ const ChartCard = () => {
 }
 
 const ChartNews = () => {
+    const navi = useNavigate()
     return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
             <Container fluid>
@@ -170,7 +172,7 @@ const ChartNews = () => {
                     }
 
                     render={
-                        data => <tr className={"EventsTabRow"}>
+                        data => <tr onClick={() => navi("/show/events?ID=" + data.ID)} className={"EventsTabRow"}>
                                     <td>
                                         <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
                                         {

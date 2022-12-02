@@ -15,7 +15,10 @@ $sql_cursor = sql_con();
 if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($ID)) {
 
     $sql_cursor->query(
-        "DELETE FROM clients WHERE ID = $ID;"
+        "DELETE FROM events WHERE ID = $ID;"
+    );
+    $sql_cursor->query(
+        "DELETE FROM events_state WHERE EventID = $ID;"
     );
 
     echo json_encode(array(
