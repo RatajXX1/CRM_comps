@@ -1,4 +1,4 @@
-import { Box, Button, Card, Container, Group, Highlight, Modal, ScrollArea, Select, Stack, TextInput, Timeline, Title,Text, Textarea } from "@mantine/core";
+import { Box, Button, Card, Container, Group, Highlight, Modal, ScrollArea, Select, Stack, TextInput, Timeline, Title,Text, Textarea, Alert } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { RichTextEditor } from "@mantine/tiptap";
 import Link from "@tiptap/extension-link";
@@ -7,17 +7,116 @@ import StarterKit from "@tiptap/starter-kit";
 import {IconArrowLeft, IconChevronRight,IconMan,IconSearch,IconPlus} from "@tabler/icons"
 import { DatePicker } from '@mantine/dates';
 import 'dayjs/locale/pl';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { useNavigate } from "react-router-dom";
-import { IconGitBranch, IconGitPullRequest, IconGitCommit, IconMessageDots } from '@tabler/icons';
+import { IconGitBranch, IconX, IconGitCommit, IconMessageDots } from '@tabler/icons';
+import Server from "../../Utilis/Server";
 
+const PassedTimeHour = (a) => {
+    let times = new Date(a)
+    let today = new Date()
+    return Math.floor((today.getTime() - times.getTime()) / 3600000)
+}
+
+const PassedTimeMinute = (a) => {
+    let times = new Date(a)
+    let today = new Date()
+    return Math.floor((today.getTime() - times.getTime()) / 60000)
+}
+
+const PassedTimeDay = (a) => {
+    let times = new Date(a)
+    let today = new Date()
+    return Math.floor((today.getTime() - times.getTime()) / (24 * 3600000))
+}
+
+const TimeWidget = (a) => {
+    let timed = PassedTimeHour(a)
+    if (timed < 1) {
+        return <Text size="xs" mt={4}>{PassedTimeMinute(a)} minut temu</Text>
+    } else {
+        if (timed > 48) {
+            if (timed > 240) {
+                return <Text size="xs" mt={4}>{a}</Text>
+            } else {
+                return <Text size="xs" mt={4}>{PassedTimeDay(a)} dni temu</Text>
+            }
+        } else {
+            return <Text size="xs" mt={4}>{PassedTimeHour(a)} godzin temu</Text>
+        }
+    }
+
+}
 
 function ShovEventsView() {
     const [Open, setOpened] = useState(false)
     const [OpenEdit, setOpenEdit] = useState(false)
+    const [Data, SetData] = useState({})
+    const [States, SetStates] = useState({})
+    const [Load, SetLoad] = useState(false)
+    const [Not, SetNot] = useState('')
     const navi = useNavigate()
+    const params = new URLSearchParams(window.location.search)
+
+    const Addfrom = useForm({
+        initialValues: {
+            Title: "",
+            Type: 0,
+            EComment:""
+        }
+    })
+
+    const AddNewComment = (values) => {
+        Server.ApiInstance()
+            .post("/api/events/addstate.php", {EventID: Data.ID, ...values})
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") {
+                        Addfrom.reset()
+                        SetNot("")
+                        setOpenEdit(false)
+                    } else {
+                        SetNot("Wystąpił błąd, spróbuj ponownie pozniej!")
+                    }
+                }
+            )
+            .catch(
+                () => {
+                    SetNot("Wystąpił błąd, spróbuj ponownie pozniej!")
+                }
+            )
+    }
+ 
+    if (params.get("ID") == undefined || params.get("ID") == null) navi(-1)
+    
+    useEffect(() => {
+
+        if (!Load) Server.ApiInstance()
+            .get("/api/events/event.php?ID=" + params.get("ID"))
+            .then(
+                resp => {
+                    if (resp.data.CODE == "OK") {
+                        SetData(resp.data.Event)
+                        SetStates(resp.data.States)
+                        Data.Contacs = JSON.parse(resp.data.Event.Contacs)
+                        SetLoad(true)
+                    } 
+                    else navi(-1)
+                }
+            )
+            .catch(
+                err => {
+                    console.log(err)
+                    navi(-1)
+                    
+                }
+            )
+            if (typeof Data.Contacs == "string" && Data.Contacs !== undefined) Data.Contacs = JSON.parse(Data.Contacs)
+    })
+    
+    
 
     return (
         <Stack
@@ -58,8 +157,18 @@ function ShovEventsView() {
                                 color: "#2D5BFF",
                                 fontSize: "16px"
                             }}
-                        >W trakcie</span>
-                        Komputer sie zepusł - 
+                        >
+                            {
+                                (
+                                    () => {
+                                        if (Data.State == 1) return "W trakcie"
+                                        else if (Data.State == 2) return "Opóznione"
+                                        else if (Data.State == 3) return "Zakończne"
+                                    }
+                                )() 
+                            }
+                        </span>
+                        {Data.title} - 
                         <Button
                             onClick={() => setOpened(true)}
                             leftIcon={<IconMan/>}
@@ -82,12 +191,12 @@ function ShovEventsView() {
                                     transform: "translate(0, -50%)",
                                 }
                             }} 
-                            variant="subtle">MDR</Button>
+                            variant="subtle">{Data.DescName}</Button>
                     </Title>
                     <Modal
                         opened={Open}
                         onClose={() => setOpened(false)}
-                        title={"MDR"}
+                        title={Data.DescName}
                     >
                         <Container fluid>
                             <TextInput
@@ -96,7 +205,7 @@ function ShovEventsView() {
                                 placeholder="Nazwa"
                                 variant="filled"
                                 radius="md"
-                                value={"MDR corp"}
+                                value={Data.Name}
                                 readOnly
                             />
                             <TextInput
@@ -105,19 +214,20 @@ function ShovEventsView() {
                                 placeholder="Nazwa opisowa"
                                 variant="filled"
                                 radius="md"
-                                value={"MDR fajna firma"}
+                                value={Data.DescName}
                                 readOnly
                             />
                             <Title order={6} sx={{fontWeight: "500"}}>
                                 Dane konatkowe
                             </Title>
-                            <ScrollArea sx={{maxHeight: "200px", marginTop: "20px", paddingBottom: "10px"}}>
+                            <ScrollArea sx={{height: "170px", marginTop: "20px", paddingBottom: "10px"}}>
                                 <Stack zIndex={2}>
                                     {
                                         (
                                             ()=> {
-                                                const tab =[]
-                                                for(let i = 0; i < 2; i++)
+                                                const tab = []
+                                                console.log("lenth", Data.Contacs)
+                                                if (Data.Contacs !== undefined) for(let i = 0; i < Data.Contacs.length; i++)
                                                     tab.push(
                                                         <Group zIndex={1}>
                                                         <Select
@@ -126,7 +236,7 @@ function ShovEventsView() {
                                                             variant="filled"
                                                             radius="md"
                                                             zIndex={10}
-                                                            defaultValue={i}
+                                                            defaultValue={Data.Contacs[i].value}
                                                             readOnly
                                                             data={[
                                                                 { value: 0, label: 'Numer telefonu' },
@@ -139,7 +249,7 @@ function ShovEventsView() {
                                                             placeholder="kontakt"
                                                             variant="filled"
                                                             radius="md"
-                                                            value={"12312321321"}
+                                                            value={Data.Contacs[i].content}
                                                             readOnly
                                                         />                                                                        
                                                     </Group>
@@ -154,8 +264,9 @@ function ShovEventsView() {
                     </Modal>
                     <Container
                         size={"xl"}
+                        dangerouslySetInnerHTML={{__html: Data.description}}
                     >
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsu
+
                     </Container>
                     <Timeline 
                         sx={{
@@ -181,12 +292,18 @@ function ShovEventsView() {
                         lineWidth={5}
                     >
 
+                        <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
+                            {Data.ETA != null &&<Text color="dimmed" size="sm">Szacowana data zakończenia <span style={{color: "#2D5BFF"}}>2020-10-20</span></Text>}
+                            {
+                                TimeWidget(Data.created)
+                            }
+                        </Timeline.Item>
 
                         {
                             (
                                 () => {
                                     const tab = []
-                                    for(let i = 0; i < 4; i++) 
+                                    for(let i = 0; i < States.length; i++) 
                                         if (i == 0)tab.push(
                                             <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title sx={{color: "#2D5BFF"}} order={5}>Dodanie wydarzenie</Title>}>
                                                 <Text color="dimmed" size="sm">Szacowana data zakończenia <span style={{color: "#2D5BFF"}}>2020-10-20</span></Text>
@@ -209,11 +326,11 @@ function ShovEventsView() {
                                 }
                             )()
                         }
-
+{/* 
                             <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}>Zakończenie - <span style={{color: "#2D5BFF"}}>Sprawa roziwązana</span></Title>}>
                                 <Text color="dimmed" size="sm">Naprawa przebiegła pomyślnie</Text>
                                 <Text size="xs" mt={4}>20 sekund temu</Text>
-                            </Timeline.Item>
+                            </Timeline.Item> */}
 
                     </Timeline>
                     <Modal
@@ -222,13 +339,23 @@ function ShovEventsView() {
                         title={"Nowy status"}
                     >
                         <Container fluid>
-                            <form>
+                            {
+                                Not != "" && <Alert sx={{marginBottom: "20px"}} onClose={() => SetNot(" ")} icon={<IconX size={18} />} color="red">
+                                {
+                                    Not
+                                }
+                                </Alert>
+                            }
+                            <form
+                                onSubmit={Addfrom.onSubmit((values) => AddNewComment(values))}
+                            >
                                 <TextInput
                                     sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
                                     label="Tytuł"
                                     placeholder="Tytuł"
                                     variant="filled"
                                     radius="md"
+                                    {...Addfrom.getInputProps('Title')}
                                 />
 
                                 <Select
@@ -243,6 +370,7 @@ function ShovEventsView() {
                                         { value: 0, label: 'Aktualizacja' },
                                         { value: 1, label: 'Zakończenie'}
                                     ]}
+                                    {...Addfrom.getInputProps('Type')}
                                 />
 
                                 <Textarea
@@ -252,6 +380,7 @@ function ShovEventsView() {
                                     variant="filled"
                                     radius="md"
                                     maxRows={4}
+                                    {...Addfrom.getInputProps('EComment')}
                                 />
 
 
