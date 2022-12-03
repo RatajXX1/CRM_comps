@@ -1,4 +1,5 @@
 import { AppShell, ScrollArea } from "@mantine/core";
+import { useEffect, useState } from "react";
 import HeaderView from "../Header";
 import NavbarView from "../Navbar";
 import AddClientView from "./addclients";
@@ -33,10 +34,21 @@ const PageSelect = () => {
 }
 
 function MainView(props) {
+    const [Open, SetOpen] = useState(false)
+
+    // useEffect(()=> {
+    //     setInterval(() => {if (window.innerWidth < 800) {
+    //         if (!Open) SetOpen(false)
+    //     }
+    //     else {
+    //         if (Open) SetOpen(true)
+    //     }}, 500)
+    // })
+
     return (
         <AppShell
-            header={<HeaderView UserData={props.User_data}/>}
-            navbar={<NavbarView UserData={props.User_data}/>}
+            header={<HeaderView Opened={Open} onClose={() => {SetOpen(!Open)}} UserData={props.User_data}/>}
+            navbar={<NavbarView Opened={!Open} onClose={() => {SetOpen(!Open)}} UserData={props.User_data}/>}
             sx={{
                 height: "90vh",
                 ".mantine-AppShell-main": {
@@ -52,6 +64,11 @@ function MainView(props) {
                 style={{width: "100%", height: "100%"}} 
                 type="always"
                 offsetScrollbars
+                sx={{
+                    ".mantine-ScrollArea-thumb": {
+                        zIndex: 3
+                    }
+                }}
             >
                 {
                     PageSelect()

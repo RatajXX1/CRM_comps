@@ -1,5 +1,6 @@
 import { createStyles, Group, Navbar } from "@mantine/core";
 import {IconHome,IconListDetails, IconAddressBook, IconUsers} from "@tabler/icons"
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const useStyles = createStyles((theme, _params, getref) => {
@@ -84,18 +85,22 @@ const NavHeader = (text) => {
 }
 
 function NavbarView(props) {
+    const [Hidden, SetHidden] = useState(true)
+
 
     return (
         <Navbar
-            width={{ base: 270 }} 
+            width={{ sm: 200, lg: 300}} 
             p="xs"
             zIndex={"1"}
             sx={{
-                backgroundColor: "rgba(241, 242, 247, 0.75);",
+                backgroundColor: props.Opened ? "rgba(241, 242, 247, 0.75);" : "rgba(241, 242, 247, 1);" ,
                 zIndex: 1,
                 height: "100%",
-                border: "none"
+                border: "none",
+                zIndex: props.Opened ? "1" : "5"
             }}
+            hidden={props.Opened}
         >
             <Navbar.Section
                 grow

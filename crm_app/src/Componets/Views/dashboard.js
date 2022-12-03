@@ -1,4 +1,4 @@
-import { Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
+import { Box, Card, Container, Flex, Group, Stack, Table, Text, Title } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,15 @@ const MonthNamesByLenght = (a) => {
 }
 
 const ChartCard = (Counts, Stats) => {
+    const [Mobile, SetMobile] = useState(false)
 
+
+    setInterval(() => {if (window.innerWidth < 1500) {
+        if (!Mobile) SetMobile(true)
+    }
+    else {
+        if (Mobile) SetMobile(false)
+    }}, 500)
     return (
         <Card shadow="sm" p="lg" radius="md" withBorder>
             <Container fluid>
@@ -38,18 +46,19 @@ const ChartCard = (Counts, Stats) => {
                     gap="xl"
                     justify="flex-start"
                     align="center"
-                    direction="row"
+                    direction={"row"}
                     wrap="nowrap"
                 >
-                    <div
+                    <Box
                         style={{
                             width: "30%"
                         }}
+                        // width={{ sm: 100, lg: 100}} 
                     >   
-                        <Title sx={{color: "#181818" , fontWeight: "400", marginTop: "20px"}} order={4}>Ilość</Title>
+                        <Title sx={{color: "#181818" , fontWeight: "400", marginTop: "0"}} order={4}>Ilość</Title>
                         <Title sx={{color: "#181818", margin: "10px 10px 10px 0"}} order={3}>{Counts.FullCount}</Title>
-                        <Title sx={{color: "#181818", fontWeight: "400", marginBottom: "-5px"}} order={4}>Status</Title>
-                        <Chart
+                        {!Mobile && <Title sx={{color: "#181818", fontWeight: "400", marginBottom: "-5px"}} order={4}>Status</Title>}
+                        {!Mobile && <Chart
                             options={{
                                 chart: {
                                     toolbar: {
@@ -77,8 +86,8 @@ const ChartCard = (Counts, Stats) => {
                             ]}
                             type="donut"
                             width="100%"
-                        />
-                    </div>
+                        />}
+                    </Box>
                     <div
                         style={{
                             width: "100%",
@@ -179,7 +188,7 @@ const ChartNews = () => {
 
                     sizes={
                         [
-                            {width: "10%"},
+                            {width: "20%"},
                             {width: "30%"},
                             {width: "auto"},
                             {width: "15%", textAlign: "right"},

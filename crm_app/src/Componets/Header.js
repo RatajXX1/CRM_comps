@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Container, Divider, Group, Header, Menu, Text } from "@mantine/core";
+import { Autocomplete, Burger, Button, Container, Divider, Group, Header, Menu, Text } from "@mantine/core";
 import {IconUserCircle,IconChevronDown,IconSearch, IconLogout} from "@tabler/icons"
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,14 @@ function HeaderView(props) {
     const [Query, SerQuery] = useState("")
     const [Data, setData] = useState([])
     const SearchRef = useRef(null)
+    const [Mobile, SetMobile] = useState(false)
+
+    setInterval(() => {if (window.innerWidth < 900) {
+        if (!Mobile) SetMobile(true)
+    }
+    else {
+        if (Mobile) SetMobile(false)
+    }}, 500)
 
     useEffect(
         () => {
@@ -44,6 +52,23 @@ function HeaderView(props) {
             }}
         >
             <Container fluid sx={{position: "relative", height: '100%'}}>
+                {Mobile && <Group
+                    sx={{
+                        float: "left",
+                        position: "relative",
+                        height: "95%",
+                        top: "50%",
+                        transform: "translate(0,-50%)",
+                    }}
+                > 
+                    <Burger
+                        opened={props.Opened}
+                        onClick={() => props.onClose()}
+                        size="sm"
+                        // color={theme.colors.gray[6]}
+                        mr="xl"
+                    />
+                </Group>}
                 <Autocomplete
                         placeholder="Szukaj.."
                         data={Data}

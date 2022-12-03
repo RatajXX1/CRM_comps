@@ -162,7 +162,7 @@ class TableView extends React.Component {
         }
 
         return (
-            <ScrollArea viewportRef={this.Area} onScrollPositionChange={(x,y) => this.scrollChange(x,y)} type="always" offsetScrollbars sx={{width: "100%", height: "100%"}}>
+            <ScrollArea zIndex={"4"} viewportRef={this.Area} onScrollPositionChange={(x,y) => this.scrollChange(x,y)} type="always" offsetScrollbars sx={{width: "100%", height: "100%"}}>
                 <Table  sx={{tableLayout: "auto",borderCollapse: "separate", borderSpacing: "0 10px", width: "99%", paddingBottom: "20px"}}>
                     <colgroup>
                         {
@@ -178,7 +178,7 @@ class TableView extends React.Component {
                             )()
                         }
                     </colgroup>
-                    <thead style={{position:'sticky', top: "0", backgroundColor: "white", zIndex: "3"}}>
+                    <thead style={{position:'sticky', top: "0", backgroundColor: "white", zIndex: "2"}}>
                         <tr style={{ backgroundColor: "white"}}>
                             {
                                 (
