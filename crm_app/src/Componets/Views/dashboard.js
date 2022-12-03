@@ -152,7 +152,7 @@ const ChartCard = (Counts, Stats) => {
                             series={[
                                 {
                                 name: "",
-                                data: Stats
+                                data: Stats.length > 0 ? Stats.reverse() : Stats
                                 }
                             ]}
                             type="line"
@@ -280,7 +280,7 @@ function DashboardView() {
             }}
         >
             {
-                ChartCard(Data,Stats.reverse())
+                ChartCard(Data,(Stats !== undefined && Stats !== null) ? Stats:[])
             }
             {
                 ChartNews()
