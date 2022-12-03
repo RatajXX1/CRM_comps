@@ -1,15 +1,57 @@
 import { Button, Card, Container, Modal, ScrollArea, Select, Stack, TextInput, Title } from "@mantine/core";
 import { DateRangePicker } from "@mantine/dates";
 import 'dayjs/locale/pl';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TableView from "../CRM_table";
 import {IconMan,IconSearch,IconUserCircle,IconAdjustments} from "@tabler/icons"
+import { useForm } from "@mantine/form";
+import SelectClient from "../SelectClient";
 
 function EventsView() {
     const [OpenFilters, SetOpenFiltres] = useState(false)
     const [Open, setOpened] = useState(false)
+    const [Filtes, SetFiltres] = useState(false)
+    const [ClientID, SetClientID] = useState(0)
+    const [ClientName, SetClientName] = useState("")
+    const [SerachQuery, SetSearchQuery] = useState("")
     const history = useNavigate()
+    const tab = useRef(null)
+
+    const FilterForm = useForm(
+        {
+            initialValues: {
+                title: "",
+                State: null,
+                Client: 0,
+                from: ""
+            }
+        }
+    )
+
+    const SetUpFiltes = (values) => {
+        let Temp = ""
+
+        if (values.title != "" && values.title.replaceAll(" ", "") != "") {
+            Temp += "&query=" + encodeURIComponent(values.title)
+        }
+
+        if (values.State != null ) {
+            Temp += "&state=" + values.State
+        }
+
+        if (ClientID != null && ClientID != 0) {
+            Temp += "&client=" + ClientID
+        }
+
+        if (values.from != "" && values.from != null) {
+            // values.ETA = values.ETA.toISOString().split("T")[0];
+            Temp += `&from=${values.from[0].toISOString().split("T")[0]}&to=${values.from[1].toISOString().split("T")[0]}`
+        }
+
+        SetSearchQuery(Temp)
+        tab.current.refresh()
+    }
 
     return (
         <Stack
@@ -24,7 +66,9 @@ function EventsView() {
                     title={"Filtry"}
                 >
                     <Container fluid>
-                        <form>
+                        <form
+                            onSubmit={FilterForm.onSubmit(values => SetUpFiltes(values))}
+                        >
                             <Button
                                 onClick={() => setOpened(true)}
                                 leftIcon={<IconMan/>}
@@ -49,24 +93,25 @@ function EventsView() {
                                     }
                                 }}
                                 variant="outline"
-                            >Wybierz klienta</Button>
+                            >{ClientName == "" ? "Wybierz klienta" : ClientName}</Button>
                             <TextInput
                                 sx={{marginBottom: "20px", ".mantine-TextInput-input:focus":{ borderColor: "#2D5BFF"}}}
                                 label="Tytuł"
                                 placeholder="Tytuł"
                                 variant="filled"
                                 radius="md"
-                                
+                                {...FilterForm.getInputProps('title')}
                             />
                             <Select
                                 label="Status"
                                 variant="filled"
                                 radius="md"
                                 data={[
-                                    { value: 0, label: 'W trakcie' },
-                                    { value: 1, label: 'Zakończona' },
-                                    { value: 2, label: 'Opóźniona' },
+                                    { value: 1, label: 'W trakcie' },
+                                    { value: 2, label: 'Zakończona' },
+                                    { value: 3, label: 'Opóźniona' },
                                 ]}
+                                {...FilterForm.getInputProps('State')}
                             />
                             <DateRangePicker
                                 variant="filled"
@@ -95,6 +140,7 @@ function EventsView() {
                                         else return {}
                                     }
                                 }
+                                {...FilterForm.getInputProps('from')}
                             />
                             <Button 
                                 rightIcon={<IconAdjustments/>}
@@ -109,62 +155,39 @@ function EventsView() {
                                     },
                                 }}
                             >Pokaż</Button>
+                            <Button 
+                                onClick={() => {
+                                    FilterForm.reset()
+                                    SetClientName("")
+                                    SetClientID(0)
+                                    SetSearchQuery("")
+                                    tab.current.refresh()
+                                }}
+                                variant="subtle"
+                                sx={{
+                                    color: "#2D5BFF",
+                                    float: "right",
+                                    marginTop: "30px",
+                                    // backgroundColor: "rgba(0, 45, 208, .1)",
+                                    "&:hover": {
+                                        backgroundColor: "rgba(0, 45, 208, .25)"
+                                    },
+                                }}
+                            >Wyczyść</Button>
                         </form>
-                        <Modal
+                        <SelectClient
                             opened={Open}
                             onClose={() => setOpened(false)}
                             title={"Wybierz klienta"}
-                        >
-                            <Container fluid>
-                                <TextInput
-                                    icon={<IconSearch/>}
-                                    placeholder="Szukaj"
-                                    variant="filled"
-                                    sx={{
-                                        ".mantine-TextInput-input:focus": {
-                                            borderColor: "#2D5BFF"
-                                        }
-                                    }}
-                                />
-                                <ScrollArea
-                                    sx={{
-                                        marginTop: "20px",
-                                        height: "400px"
-                                    }}
-                                >
-                                    <Stack spacing={"xs"}>
-                                        {
-                                            (
-                                                () => {
-                                                    const tab = []
-                                                    for(let i =0; i < 25; i++) 
-                                                        tab.push(
-                                                            <Button 
-                                                                sx={{
-                                                                    alignItems: "left",
-                                                                    backgroundColor: "rgba(0, 45, 208, .1)",
-                                                                    color: "#2D5BFF",
-                                                                    "&:hover": {
-                                                                        backgroundColor: "rgba(0, 45, 208, .25)",
-                                                                    },
-                                                                    ".mantine-Button-inner": {
-                                                                        alignItems: "left",
-                                                                        justifyContent: "left"
-                                                                    }
-                                                                }}
-                                                                leftIcon={<IconUserCircle/>}
-                                                            >
-                                                                Klient {i}
-                                                            </Button>
-                                                        )
-                                                    return tab
-                                                }
-                                            )()
-                                        }
-                                    </Stack>
-                                </ScrollArea>
-                            </Container>
-                        </Modal>
+                            onSelect={
+                                (data) => {
+                                    SetClientID(parseInt(data.ID))
+                                    SetClientName(data.Namop)
+                                    setOpened(false)
+                                }                            
+                            }
+                        />
+
                     </Container>
                 </Modal>
                 <Container fluid sx={{height: "100%"}}>
@@ -197,6 +220,7 @@ function EventsView() {
                         </Button>
                     </Card.Section>
                     <TableView
+                        ref={tab}
                         headers={
                             [
                                 "Status",
@@ -208,7 +232,7 @@ function EventsView() {
                         }
 
                         PaginationFunc={
-                            (page) => `/api/events/index.php?page=${page}`
+                            (page) => `/api/events/index.php?page=${page}` + SerachQuery
                         }
     
                         ResponseFunc={

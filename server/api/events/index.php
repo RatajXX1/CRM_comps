@@ -83,6 +83,7 @@ if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($page)) {
     } else echo json_encode(array(
         'CODE' => 'OK',
         'Mess' => 'Brak użytkownikow!',
+        "Queyr" => SearchQuery(),
     ));
 } else echo json_encode(array(
     'CODE' => 'NO',
