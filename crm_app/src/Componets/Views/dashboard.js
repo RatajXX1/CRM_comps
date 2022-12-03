@@ -30,7 +30,7 @@ const ChartCard = (Counts, Stats) => {
     const [Mobile, SetMobile] = useState(false)
 
 
-    setInterval(() => {if (window.innerWidth < 1500) {
+    setInterval(() => {if (window.innerWidth < 900) {
         if (!Mobile) SetMobile(true)
     }
     else {
@@ -46,12 +46,13 @@ const ChartCard = (Counts, Stats) => {
                     gap="xl"
                     justify="flex-start"
                     align="center"
-                    direction={"row"}
+                    direction={Mobile ? "column" :"row"}
                     wrap="nowrap"
                 >
                     <Box
                         style={{
-                            width: "30%"
+                            width: "500px",
+                            marginTop: '20px'
                         }}
                         // width={{ sm: 100, lg: 100}} 
                     >   
@@ -86,6 +87,7 @@ const ChartCard = (Counts, Stats) => {
                             ]}
                             type="donut"
                             width="100%"
+                            height={"100%"}
                         />}
                     </Box>
                     <div
