@@ -1,16 +1,38 @@
-import { Autocomplete, Button, Container, Divider, Group, Header, Menu } from "@mantine/core";
+import { Autocomplete, Button, Container, Divider, Group, Header, Menu, Text } from "@mantine/core";
 import {IconUserCircle,IconChevronDown,IconSearch, IconLogout} from "@tabler/icons"
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Server from "../Utilis/Server";
 
 function HeaderView(props) {
     const navi = useNavigate()
+    const [Query, SerQuery] = useState("")
+    const [Data, setData] = useState([])
+    const SearchRef = useRef(null)
+
+    useEffect(
+        () => {
+            if (Query !== undefined && Query.length >= 3) setTimeout(()=> {
+                if (Query.length >= 3) {
+                    Server.ApiInstance()
+                        .get("/api/search/index.php?query=" + encodeURIComponent(Query))
+                        .then(
+                            resp => {
+                                if (resp.data.CODE === "OK") {
+                                    setData(resp.data.Users)
+                                }
+                            }
+                        )
+                }
+            }, 500)
+        }
+    )
 
     const LogOut = () => {
         Server.ApiInstance().get("/api/auth/logout.php")
             .then(() => navi("/"))
     }
-
+    // Type == 1 ? () => {alert("test");window.localStorage.setItem("ClientData", JSON.stringify({ ID,tittle,Type,...others}));navi("/show/client")} : () => navi("/show/events?ID="+ID) 
     return (
         <Header
             height={64}
@@ -24,7 +46,22 @@ function HeaderView(props) {
             <Container fluid sx={{position: "relative", height: '100%'}}>
                 <Autocomplete
                         placeholder="Szukaj.."
-                        data={["Komputer padł", "Komputer padł", "Komputer padł"]}
+                        data={Data}
+                        ref={SearchRef}
+                        itemComponent={
+                            ({ ID,tittle,Type,...others}) => {
+                                others.onMouseDown = Type == 1 ? () => {SearchRef.current.blur();window.localStorage.setItem("ClientData", JSON.stringify({ ID,tittle,Type,...others}));navi("/show/client")} : () => {SearchRef.current.blur();navi("/show/events?ID="+ID)}
+                               
+                                // console.log(others)
+                                return <div onClick={() => alert(ID)} {...others} >
+                                    <Group noWrap>
+                                        <div>
+                                            <Text>{tittle} - {Type == 1 ? "użytkwonik" : "wydarzenie"}</Text>
+                                        </div>
+                                    </Group>
+                                </div>
+                            }
+                        }
                         sx={{
                             position: "absolute",
                             top: "50%",
@@ -38,6 +75,9 @@ function HeaderView(props) {
                             }
                             
                         }}
+                        filter={(value, item) => true
+                        }
+                        onChange={e => SerQuery(e)}
                         zIndex={9}
                         icon={<IconSearch/>}
                     >

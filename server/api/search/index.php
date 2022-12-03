@@ -13,7 +13,7 @@ $page = $_GET['query'] ?? 0;
 $sql_cursor = sql_con();
 if (enter_to_view_by_rank($sql_cursor, 1)) {
     // $page = 25 * ($page > 0 ? $page - 1 : $page);
-    $resoult = $sql_cursor->query("SELECT ID,Name,DescName FROM clients limit 5 WHERE Name like '%$page%' or DescName like '%$page%' ;");
+    $resoult = $sql_cursor->query("SELECT ID,Name,DescName,created,Contacs FROM clients WHERE Name like '%$page%' or DescName like '%$page%'  limit 5;");
     $users = array();
     while ($row = $resoult->fetch_assoc()) {
         $users[] = array(
@@ -21,9 +21,11 @@ if (enter_to_view_by_rank($sql_cursor, 1)) {
             'Namop' => $row['DescName'],
             'tittle' => $row['Name'],
             'Type' => 1,
+            'dates' => $row['created'],
+            'Contacs' => $row['Contacs']
         );
     }
-    $resoult = $sql_cursor->query("SELECT ID,title FROM events limit 5 WHERE title like '%$page%';");
+    $resoult = $sql_cursor->query("SELECT ID,title FROM events WHERE title like '%$page%'  limit 5;");
     while ($row = $resoult->fetch_assoc()) {
         $users[] = array(
             'ID' => $row['ID'],
