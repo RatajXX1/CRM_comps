@@ -241,7 +241,7 @@ function EventsView() {
                         
                         sizes={
                             [
-                                {width: "20%"},
+                                {width: "10%"},
                                 {width: "15%"},
                                 {width: "auto"},
                                 {width: "15%"},

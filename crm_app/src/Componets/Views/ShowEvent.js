@@ -93,7 +93,7 @@ function ShovEventsView() {
 
     const AddNewComment = (values) => {
         Server.ApiInstance()
-            .post("/api/events/addstate.php", {EventID: Data.ID, ...values})
+            .post("/api/events/addstate.php", {EventID: params.get("ID"), ...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -362,7 +362,7 @@ function ShovEventsView() {
                                             </Timeline.Item>
                                         )
                                     }
-                                    if (Data.State == 1 || (Data.State != 1 && Data.ETA == null) ) {
+                                    if (Data.State == 1 || (Data.State < 3 && Data.ETA == null) ) {
                                         tab.push(
                                             <Timeline.Item bullet={<IconGitBranch size={12} />} title={<Title order={5}><span style={{color: "#2D5BFF"}}>Oczekiwanie nowe zdarzenia</span></Title>}>
                                                 {/* <Text color="dimmed" size="sm">e</Text> */}
@@ -496,7 +496,7 @@ function ShovEventsView() {
                                 }
                             }}
                         >usuń wydarzenie</Button>
-                        <Button
+                        {Data.State != 3 && <Button
                             onClick={() => setOpenEdit(true)}
                             sx={{
                                 backgroundColor: "rgba(0, 45, 208, .1)",
@@ -505,7 +505,7 @@ function ShovEventsView() {
                                     backgroundColor: "rgba(0, 45, 208, .25)"
                                 }
                             }}
-                        >Dodaj nowy status</Button>
+                        >Dodaj nowy status</Button>}
                     </Group>
                 </Container>
             </Card>

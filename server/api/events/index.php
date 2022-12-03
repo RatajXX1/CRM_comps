@@ -59,6 +59,7 @@ function SearchQuery() {
 $sql_cursor = sql_con();
 if (enter_to_view_by_rank($sql_cursor, 2) && is_numeric($page)) {
     $page = 25 * ($page > 0 ? $page - 1 : $page);
+    $resoult = $sql_cursor->query("UPDATE events SET State = 2 WHERE ETA < NOW():");
     if (isFilter())
         $resoult = $sql_cursor->query("SELECT events.ID,events.State,clients.DescName,events.title,events.created,events.ETA FROM events JOIN clients ON clients.ID = events.ClientID WHERE ". SearchQuery() ." order by events.ID asc limit 25 offset $page;");
     else $resoult = $sql_cursor->query("SELECT events.ID,events.State,clients.DescName,events.title,events.created,events.ETA FROM events JOIN clients ON clients.ID = events.ClientID order by events.ID asc limit 25 offset $page;");

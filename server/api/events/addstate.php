@@ -35,7 +35,9 @@ if (enter_to_view_by_rank($sql_cursor, 1) && checkStructure()) {
     // $stmt->execute();
     $stmt->execute();
     $stmt->close();
-
+    if ($data['Type'] == 1) {
+        $sql_cursor->query("UPDATE events SET State = 3 WHERE ID = " . $data['EventID']);
+    }
     echo json_encode(array(
         'CODE' => 'OK',
         'Mess' => 'Konto stworzone!',

@@ -82,7 +82,7 @@ const ChartCard = (Counts, Stats) => {
                             }}
                             
                             series={[
-                                Counts.End, Counts.Late, Counts.Work
+                                Math.floor((parseInt(Counts.End) / parseInt(Counts.FullCount)) * 100), Math.floor((parseInt(Counts.Late) / parseInt(Counts.FullCount)) * 100), Math.floor((parseInt(Counts.Work) / parseInt(Counts.FullCount)) * 100)
                             ]}
                             type="donut"
                             width="100%"
@@ -188,7 +188,7 @@ const ChartNews = () => {
 
                     sizes={
                         [
-                            {width: "20%"},
+                            {width: "10%"},
                             {width: "30%"},
                             {width: "auto"},
                             {width: "15%", textAlign: "right"},
@@ -268,7 +268,7 @@ function DashboardView() {
                     }
                 )
 
-        console.log(Stats)
+        // console.log(Stats)
     })
 
 
@@ -280,7 +280,7 @@ function DashboardView() {
             }}
         >
             {
-                ChartCard(Data,Stats)
+                ChartCard(Data,Stats.reverse())
             }
             {
                 ChartNews()
