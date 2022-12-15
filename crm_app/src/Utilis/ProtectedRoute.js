@@ -16,7 +16,7 @@ export class ProtectedRoute extends React.Component {
 
     componentDidMount() {
         Server.ApiInstance()
-            .get("/api/auth/authorize.php")
+            .get("api/auth/authorize.php")
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {

@@ -59,7 +59,7 @@ function ShowClientView() {
     const SaveEdit = (values) => {
         let ds = JSON.parse(window.localStorage.getItem("ClientData"))
         Server.ApiInstance()
-            .post("/api/clients/edit.php", {ID: ds.ID, Contacs: JSON.stringify(Contacs), ...values})
+            .post("api/clients/edit.php", {ID: ds.ID, Contacs: JSON.stringify(Contacs), ...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -79,7 +79,7 @@ function ShowClientView() {
     const RemoveUser = () => {
         let ds = JSON.parse(window.localStorage.getItem("ClientData"))
         Server.ApiInstance()
-            .get("/api/clients/remove.php?ID=" + ds.ID)
+            .get("api/clients/remove.php?ID=" + ds.ID)
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {

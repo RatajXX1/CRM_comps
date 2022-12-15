@@ -52,7 +52,7 @@ const useStyles = createStyles((theme, _params, getref) => {
 const NavButton = (text, path, icons) => {
     const {classes, cx} = useStyles()
     return (
-        <Link to={path} className={cx(classes.link, {[classes.linkActive]: path == window.location.pathname}) }>
+        <Link to={path} className={cx(classes.link, {[classes.linkActive]: "#" +path == window.location.hash}) }>
             {/* <IconHome className={classes.linkIcon}/> */}
             {
                 icons

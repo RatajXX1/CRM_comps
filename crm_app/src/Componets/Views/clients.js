@@ -44,7 +44,7 @@ function ClientsView() {
                         }
 
                         PaginationFunc={
-                            (page) => `/api/clients/index.php?page=${page}`
+                            (page) => `api/clients/index.php?page=${page}`
                         }
 
                         ResponseFunc={

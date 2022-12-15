@@ -50,7 +50,7 @@ function AddEventsView() {
             delete values["ETA"]
         }
         Server.ApiInstance()
-            .post("/api/events/add.php", {ClientID: ClientID,description: Desceditor.getHTML(),...values})
+            .post("api/events/add.php", {ClientID: ClientID,description: Desceditor.getHTML(),...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {

@@ -13,22 +13,22 @@ import UsersView from "./users";
 
 
 const PageSelect = () => {
-    switch (window.location.pathname) {
-        case "/dashboard":
+    switch (window.location.hash) {
+        case "#/dashboard":
             return <DashboardView/>
-        case "/events":
+        case "#/events":
             return <EventsView/>
-        case "/add/events":
+        case "#/add/events":
             return <AddEventsView/>
-        case "/show/events":
+        case "#/show/events":
             return <ShovEventsView/>
-        case "/show/client":
+        case "#/show/client":
             return <ShowClientView/>            
-        case "/add/clients":
+        case "#/add/clients":
             return <AddClientView/>        
-        case "/clients":
+        case "#/clients":
             return <ClientsView/>
-        case "/users":
+        case "#/users":
             return <UsersView/>                        
     }
 }

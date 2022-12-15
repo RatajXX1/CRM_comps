@@ -198,7 +198,7 @@ const ChartNews = () => {
                     }
 
                     PaginationFunc={
-                        (page) => `/api/events/latest.php?page=${page}`
+                        (page) => `api/events/latest.php?page=${page}`
                     }
 
                     ResponseFunc={
@@ -206,7 +206,7 @@ const ChartNews = () => {
                     }
 
                     render={
-                        data => <tr onClick={() => navi("/show/events?ID=" + data.ID)} className={"EventsTabRow"}>
+                        data => <tr onClick={() => {window.localStorage.setItem("EID", data.ID);navi("/show/events")}} className={"EventsTabRow"}>
                                     <td>
                                         <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
                                         {
@@ -258,7 +258,7 @@ function DashboardView() {
     useEffect(() => {
         if (!Load) 
             Server.ApiInstance()
-                .get("/api/dash/index.php")
+                .get("api/dash/index.php")
                 .then(
                     resp => {
                         if (resp.data.CODE == "OK") {

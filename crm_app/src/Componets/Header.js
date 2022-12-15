@@ -23,7 +23,7 @@ function HeaderView(props) {
             if (Query !== undefined && Query.length >= 3) setTimeout(()=> {
                 if (Query.length >= 3) {
                     Server.ApiInstance()
-                        .get("/api/search/index.php?query=" + encodeURIComponent(Query))
+                        .get("api/search/index.php?query=" + encodeURIComponent(Query))
                         .then(
                             resp => {
                                 if (resp.data.CODE === "OK") {
@@ -37,7 +37,7 @@ function HeaderView(props) {
     )
 
     const LogOut = () => {
-        Server.ApiInstance().get("/api/auth/logout.php")
+        Server.ApiInstance().get("api/auth/logout.php")
             .then(() => navi("/"))
     }
     // Type == 1 ? () => {alert("test");window.localStorage.setItem("ClientData", JSON.stringify({ ID,tittle,Type,...others}));navi("/show/client")} : () => navi("/show/events?ID="+ID) 

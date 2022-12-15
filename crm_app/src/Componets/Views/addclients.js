@@ -40,7 +40,7 @@ function AddClientView() {
         // console.log("CONTACS =", Contacs)
 
         Server.ApiInstance()
-            .post("/api/clients/add.php", {Contacs: JSON.stringify(Contacs),...values})
+            .post("api/clients/add.php", {Contacs: JSON.stringify(Contacs),...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {

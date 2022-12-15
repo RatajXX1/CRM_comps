@@ -11,3 +11,4 @@ function sql_con() {
     $sql_cursor->set_charset('utf8');
     return $sql_cursor;
 }
+

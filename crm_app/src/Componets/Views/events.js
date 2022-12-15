@@ -232,7 +232,7 @@ function EventsView() {
                         }
 
                         PaginationFunc={
-                            (page) => `/api/events/index.php?page=${page}` + SerachQuery
+                            (page) => `api/events/index.php?page=${page}` + SerachQuery
                         }
     
                         ResponseFunc={
@@ -250,7 +250,7 @@ function EventsView() {
                         }
 
                         render={
-                            (data) => <tr className="EventsTabRow" onClick={() => history("/show/events?ID=" + data.ID)}>
+                            (data) => <tr className="EventsTabRow" onClick={() => {window.localStorage.setItem("EID", data.ID);history("/show/events")}}>
                                 <td>
                                     <a className={(() => {if (data.Type == 1) return "EventsTabRow_state_work"; else if (data.Type == 2) return "EventsTabRow_state_end"; else if (data.Type == 3) return "EventsTabRow_state_succes"})()}>
                                         {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import LoginView from './Componets/Views/login';
 import MainView from './Componets/Views/main';
 import './index.css';
@@ -12,9 +12,9 @@ import { ProtectedRoute } from './Utilis/ProtectedRoute';
 const root = ReactDOM.createRoot(document.body);
 root.render(
   // <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route path='/' element={<LoginView/>}/>
+        <Route path='/' exact element={<LoginView/>}/>
         <Route path='/dashboard' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
         <Route path='/events' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
         <Route path='/clients' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
@@ -24,7 +24,7 @@ root.render(
         <Route path='/show/events' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
         <Route path='/show/client' element={<ProtectedRoute><MainView/></ProtectedRoute>}/>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   /* </React.StrictMode> */
 );
 

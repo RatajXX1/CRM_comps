@@ -29,12 +29,12 @@ function LoginView() {
         // window.location.href = "/dashboard"
         SetNotfi(true)
         Server.ApiInstance().post(
-            "/api/auth/login.php",
+            "api/auth/login.php",
             {...valss}
         ).then( 
             resp => {
                 if (resp.data.CODE != "NO") {
-                    window.location.href = "/dashboard"
+                    navi("/dashboard")
                 } else {
                     NotfiUP(resp.data.Mess)
                 }   
@@ -51,14 +51,14 @@ function LoginView() {
     useEffect(
         () => {
             if (!Checked)Server.ApiInstance()
-            .get("/api/auth/authorize.php")
+            .get("api/auth/authorize.php")
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") navi("/dashboard")
                     SetChecked(true)
                 }
             )
-        }
+        }, []
     )
 
     return (

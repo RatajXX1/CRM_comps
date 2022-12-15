@@ -34,7 +34,7 @@ class SelectClient extends React.Component {
 
     async DownloadData() {
         if (this.state.SearchQuery.replaceAll(" ", "") == "") await Server.ApiInstance()
-            .get("/api/clients/index.php?page=" + this.state.Page.toString())
+            .get("api/clients/index.php?page=" + this.state.Page.toString())
             .then(
                 resp => {
                     if (Object.entries(resp.data.Users).length >= 25) this.state.CanLoad = true
@@ -44,7 +44,7 @@ class SelectClient extends React.Component {
                 }
             )
         else await Server.ApiInstance()
-            .get(`/api/clients/search.php?query=${encodeURIComponent(this.state.SearchQuery)}&page=` + this.state.Page.toString())
+            .get(`api/clients/search.php?query=${encodeURIComponent(this.state.SearchQuery)}&page=` + this.state.Page.toString())
             .then(
                 resp => {
                     if (Object.entries(resp.data.Users).length >= 25) this.state.CanLoad = true

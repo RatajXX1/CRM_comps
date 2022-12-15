@@ -53,12 +53,13 @@ const TimeWidget = (a) => {
 function ShovEventsView() {
     const [Open, setOpened] = useState(false)
     const [OpenEdit, setOpenEdit] = useState(false)
-    const [Data, SetData] = useState({})
+    const [Data, SetData] = useState({Contacs: {}, State: 1, title: "", DescName: "",  Name: "", description: "", created: "", ETA: "", ID: 0})
     const [States, SetStates] = useState({})
     const [Load, SetLoad] = useState(false)
     const [Not, SetNot] = useState('')
     const navi = useNavigate()
-    const params = new URLSearchParams(window.location.search)
+    let params = window.localStorage.getItem("EID")
+    console.log("tgest")
 
     const Addfrom = useForm({
         initialValues: {
@@ -70,7 +71,7 @@ function ShovEventsView() {
 
     const RefreshData = () => {
         Server.ApiInstance()
-            .get("/api/events/event.php?ID=" + params.get("ID"))
+            .get("api/events/event.php?ID=" + params)
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -93,7 +94,7 @@ function ShovEventsView() {
 
     const AddNewComment = (values) => {
         Server.ApiInstance()
-            .post("/api/events/addstate.php", {EventID: params.get("ID"), ...values})
+            .post("api/events/addstate.php", {EventID: params, ...values})
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -115,7 +116,7 @@ function ShovEventsView() {
 
     const RemoveEvent = () => {
         Server.ApiInstance()
-            .post("/api/events/remove.php?ID="+Data.ID)
+            .post("api/events/remove.php?ID="+Data.ID)
             .then(
                 resp => {
                     if (resp.data.CODE == "OK") {
@@ -130,35 +131,36 @@ function ShovEventsView() {
             )
     }
  
-    if (params.get("ID") == undefined || params.get("ID") == null) navi(-1)
+    // if (params.get("ID") == undefined || params.get("ID") == null) navi(-1)
     
     useEffect(() => {
-
-        if (!Load) Server.ApiInstance()
-            .get("/api/events/event.php?ID=" + params.get("ID"))
-            .then(
-                resp => {
-                    if (resp.data.CODE == "OK") {
-                        SetData(resp.data.Event)
-                        SetStates(resp.data.States)
-                        Data.Contacs = JSON.parse(resp.data.Event.Contacs)
-                        SetLoad(true)
-                    } 
-                    else navi(-1)
-                }
-            )
-            .catch(
-                err => {
-                    console.log(err)
-                    navi(-1)
-                    
-                }
-            )
-            if (typeof Data.Contacs == "string" && Data.Contacs !== undefined) Data.Contacs = JSON.parse(Data.Contacs)
-    })
+        // console.log('robione, ID=', params)
+        // params = new URLSearchParams(window.location.href.split("?")[1])
+        if (params != undefined && params != null) {
+            Server.ApiInstance()
+                .get("api/events/event.php?ID=" + params)
+                .then(
+                    resp => {
+                        if (resp.data.CODE == "OK") {
+                            SetData(resp.data.Event)
+                            SetStates(resp.data.States)
+                            Data.Contacs = JSON.parse(resp.data.Event.Contacs)
+                            SetLoad(true)
+                        } 
+                        else navi(-1)
+                    }
+                )
+                .catch(
+                    err => {
+                        console.log(err)
+                        navi(-1)
+                        
+                    }
+                )
+                if (typeof Data.Contacs == "string" && Data.Contacs !== undefined) Data.Contacs = JSON.parse(Data.Contacs)            
+        }
+    }, [])
     
-    
-
     return (
         <Stack
             sx={{
